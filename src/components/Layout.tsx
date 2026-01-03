@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Home, Dumbbell, List, User } from "lucide-react";
 import { Dashboard } from "./Dashboard";
 import { ExerciseLibrary } from "./ExerciseLibrary";
+import { WorkoutLogger } from "./WorkoutLogger";
 
 export function Layout() {
     const [activeTab, setActiveTab] = useState("dashboard");
@@ -11,7 +12,7 @@ export function Layout() {
             case "dashboard":
                 return <Dashboard />;
             case "workouts":
-                return <div className="p-4 text-neutral-400">Workouts Placeholder</div>;
+                return <WorkoutLogger onFinish={() => setActiveTab("dashboard")} />;
             case "exercises":
                 return <ExerciseLibrary />;
             case "profile":

@@ -38,7 +38,11 @@ function getCategoryLabel(equipmentType: string | null): string {
     }
 }
 
-export function ExerciseLibrary() {
+interface ExerciseLibraryProps {
+    onSelect?: (exercise: Exercise) => void;
+}
+
+export function ExerciseLibrary({ onSelect }: ExerciseLibraryProps) {
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = useState(true);
@@ -136,7 +140,8 @@ export function ExerciseLibrary() {
                         {filteredExercises.map((exercise) => (
                             <Card
                                 key={exercise.id}
-                                className="bg-neutral-900 border-neutral-800 hover:border-neutral-700 transition-colors cursor-pointer"
+                                onClick={() => onSelect?.(exercise)}
+                                className={`bg-neutral-900 border-neutral-800 hover:border-neutral-700 transition-colors cursor-pointer ${onSelect ? 'hover:bg-neutral-800' : ''}`}
                             >
                                 <CardContent className="flex items-center justify-between py-4">
                                     <div className="flex-1 min-w-0">
