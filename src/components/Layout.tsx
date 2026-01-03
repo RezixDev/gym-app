@@ -3,16 +3,22 @@ import { Home, Dumbbell, List, User } from "lucide-react";
 import { Dashboard } from "./Dashboard";
 import { ExerciseLibrary } from "./ExerciseLibrary";
 import { WorkoutLogger } from "./WorkoutLogger";
+import { WorkoutHistory } from "./WorkoutHistory";
 
 export function Layout() {
     const [activeTab, setActiveTab] = useState("dashboard");
+    const [workoutView, setWorkoutView] = useState<"history" | "logger">("history");
 
     const renderContent = () => {
         switch (activeTab) {
             case "dashboard":
                 return <Dashboard />;
             case "workouts":
-                return <WorkoutLogger onFinish={() => setActiveTab("dashboard")} />;
+                return workoutView === "history" ? (
+                    <WorkoutHistory onStartWorkout={() => setWorkoutView("logger")} />
+                ) : (
+                    <WorkoutLogger onFinish={() => setWorkoutView("history")} />
+                );
             case "exercises":
                 return <ExerciseLibrary />;
             case "profile":
