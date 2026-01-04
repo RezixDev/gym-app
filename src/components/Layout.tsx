@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { Home, Dumbbell, List, User } from "lucide-react";
+
 import { Dashboard } from "./Dashboard";
 import { ExerciseLibrary } from "./ExerciseLibrary";
 import { WorkoutLogger } from "./WorkoutLogger";
 import { WorkoutHistory } from "./WorkoutHistory";
+import { Profile } from "./Profile";
+import { ProgressAnalytics } from "./ProgressAnalytics";
+import { Home, Dumbbell, List, User, LineChart } from "lucide-react";
 
 export function Layout() {
     const [activeTab, setActiveTab] = useState("dashboard");
@@ -22,7 +25,9 @@ export function Layout() {
             case "exercises":
                 return <ExerciseLibrary />;
             case "profile":
-                return <div className="p-4 text-neutral-400">Profile Placeholder</div>;
+                return <Profile />;
+            case "analytics":
+                return <ProgressAnalytics />;
             default:
                 return <Dashboard />;
         }
@@ -63,6 +68,15 @@ export function Layout() {
                     >
                         <List className="w-6 h-6" />
                         <span className="text-[10px] font-medium">Exercises</span>
+                    </button>
+
+                    <button
+                        onClick={() => setActiveTab("analytics")}
+                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "analytics" ? "text-emerald-500" : "text-neutral-500 hover:text-neutral-300"
+                            }`}
+                    >
+                        <LineChart className="w-6 h-6" />
+                        <span className="text-[10px] font-medium">Analytics</span>
                     </button>
 
                     <button
