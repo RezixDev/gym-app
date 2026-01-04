@@ -31,6 +31,7 @@ interface ChartDataPoint {
     dateObj: Date;
     max1RM: number;
     totalVolume: number;
+    avgWeight: number;
 }
 
 export function ProgressAnalytics() {
@@ -39,7 +40,7 @@ export function ProgressAnalytics() {
     const [loading, setLoading] = useState(true);
     const [loadingData, setLoadingData] = useState(false);
     const [rawData, setRawData] = useState<WorkoutSet[]>([]);
-    const [metric, setMetric] = useState<"1rm" | "volume">("1rm");
+    const [metric, setMetric] = useState<"1rm" | "volume" | "avgWeight">("1rm");
 
     // Fetch exercises on mount
     useEffect(() => {
@@ -137,11 +138,16 @@ export function ProgressAnalytics() {
             // Volume = weight * reps
             const totalVolume = sets.reduce((sum, s) => sum + (s.weight * s.reps), 0);
 
+            // Avg Weight
+            const totalWeight = sets.reduce((sum, s) => sum + s.weight, 0);
+            const avgWeight = totalWeight / sets.length;
+
             return {
                 date: format(dateObj, "MMM d"), // Display format
                 dateObj, // For sorting if needed
                 max1RM: Math.round(max1RM),
-                totalVolume: Math.round(totalVolume)
+                totalVolume: Math.round(totalVolume),
+                avgWeight: Math.round(avgWeight * 10) / 10 // Round to 1 decimal
             };
         });
 
@@ -189,6 +195,12 @@ export function ProgressAnalytics() {
                             >
                                 Volume
                             </button>
+                            <button
+                                onClick={() => setMetric("avgWeight")}
+                                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${metric === "avgWeight" ? "bg-emerald-500/20 text-emerald-500" : "text-neutral-400 hover:text-neutral-300"}`}
+                            >
+                                Avg Weight
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -229,7 +241,7 @@ export function ProgressAnalytics() {
                                 />
                                 <Line
                                     type="monotone"
-                                    dataKey={metric === "1rm" ? "max1RM" : "totalVolume"}
+                                    dataKey={metric === "1rm" ? "max1RM" : metric === "volume" ? "totalVolume" : "avgWeight"}
                                     stroke="#10b981"
                                     strokeWidth={3}
                                     dot={{ fill: '#10b981', r: 4, strokeWidth: 0 }}

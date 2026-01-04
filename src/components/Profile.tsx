@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/lib/supabase";
+import { seedWorkouts } from "@/lib/seedData";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -200,6 +201,23 @@ export function Profile() {
                         </div>
                     </CardContent>
                 </Card>
+
+                <Button
+                    variant="outline"
+                    className="w-full border-emerald-900/50 text-emerald-500 hover:bg-emerald-950 hover:text-emerald-400 h-12 dashed"
+                    onClick={async () => {
+                        if (!user) return;
+                        const promise = seedWorkouts(user.id);
+                        toast.promise(promise, {
+                            loading: 'Seeding test data...',
+                            success: 'Test data seeded successfully!',
+                            error: 'Failed to seed data',
+                        });
+                    }}
+                >
+                    <Activity className="mr-2 h-4 w-4" />
+                    Seed Test Data (30 Days)
+                </Button>
 
                 <Button
                     variant="outline"
