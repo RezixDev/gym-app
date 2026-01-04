@@ -207,6 +207,7 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
                                             <div className="col-span-4">
                                                 <Input
                                                     type="number"
+                                                    inputMode="decimal"
                                                     placeholder="0"
                                                     value={set.weight}
                                                     onChange={(e) => updateSet(exercise.id, idx, "weight", e.target.value)}
@@ -216,6 +217,7 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
                                             <div className="col-span-4">
                                                 <Input
                                                     type="number"
+                                                    inputMode="decimal"
                                                     placeholder="0"
                                                     value={set.reps}
                                                     onChange={(e) => updateSet(exercise.id, idx, "reps", e.target.value)}
