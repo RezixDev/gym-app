@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Activity, Dumbbell } from "lucide-react";
 import { NutritionSummary } from "@/components/nutrition/NutritionSummary";
-import { NutritionLogger } from "@/components/nutrition/NutritionLogger";
+import { MealBuilder } from "@/components/nutrition/MealBuilder";
 
 export function Dashboard() {
     const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -44,7 +44,7 @@ export function Dashboard() {
                 <NutritionSummary refreshTrigger={refreshTrigger} />
 
                 {/* 4. Logging Interface */}
-                <NutritionLogger onLogComplete={handleLogComplete} />
+                <MealBuilder onLogComplete={handleLogComplete} />
             </div>
         </div>
     );

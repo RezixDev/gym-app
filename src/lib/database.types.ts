@@ -177,6 +177,90 @@ export interface Database {
                     created_at?: string | null
                 }
             }
+            food_items: {
+                Row: {
+                    id: string
+                    name: string
+                    calories: number
+                    protein: number
+                    carbs: number
+                    fats: number
+                    unit: string
+                    quality_score: number
+                    image_url: string | null
+                    created_at: string | null
+                }
+                Insert: {
+                    id?: string
+                    name: string
+                    calories?: number
+                    protein?: number
+                    carbs?: number
+                    fats?: number
+                    unit?: string
+                    quality_score?: number
+                    image_url?: string | null
+                    created_at?: string | null
+                }
+                Update: {
+                    id?: string
+                    name?: string
+                    calories?: number
+                    protein?: number
+                    carbs?: number
+                    fats?: number
+                    unit?: string
+                    quality_score?: number
+                    image_url?: string | null
+                    created_at?: string | null
+                }
+            }
+            meal_logs: {
+                Row: {
+                    id: string
+                    user_id: string
+                    date: string
+                    meal_type: string
+                    created_at: string | null
+                }
+                Insert: {
+                    id?: string
+                    user_id: string
+                    date?: string
+                    meal_type: string
+                    created_at?: string | null
+                }
+                Update: {
+                    id?: string
+                    user_id?: string
+                    date?: string
+                    meal_type?: string
+                    created_at?: string | null
+                }
+            }
+            meal_items: {
+                Row: {
+                    id: string
+                    meal_log_id: string
+                    food_item_id: string
+                    quantity: number
+                    created_at: string | null
+                }
+                Insert: {
+                    id?: string
+                    meal_log_id: string
+                    food_item_id: string
+                    quantity?: number
+                    created_at?: string | null
+                }
+                Update: {
+                    id?: string
+                    meal_log_id?: string
+                    food_item_id?: string
+                    quantity?: number
+                    created_at?: string | null
+                }
+            }
         }
     }
 }
