@@ -4,30 +4,24 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import { Ruler, Check, AlertCircle } from "lucide-react";
+import { Ruler, Check, AlertCircle, Calendar } from "lucide-react";
+import { format } from "date-fns";
 
 const BODY_PARTS = [
-    "Biceps (Right)",
-    "Biceps (Left)",
+    "Weight",
+    "Neck",
+    "Shoulders",
     "Chest",
+    "Biceps (Left)",
+    "Biceps (Right)",
+    "Forearm (Left)",
+    "Forearm (Right)",
     "Waist",
     "Hips",
-    "Thigh (Right)",
     "Thigh (Left)",
-    "Calf (Right)",
+    "Thigh (Right)",
     "Calf (Left)",
-    "Shoulders",
-    "Forearm (Right)",
-    "Forearm (Left)",
-    "Neck",
-    "Weight",
+    "Calf (Right)",
 ];
 
 interface MeasurementEntryFormProps {
@@ -35,17 +29,25 @@ interface MeasurementEntryFormProps {
 }
 
 export function MeasurementEntryForm({ onEntryAdded }: MeasurementEntryFormProps) {
-    const [partName, setPartName] = useState("");
-    const [value, setValue] = useState("");
-    const [unit, setUnit] = useState("cm");
+    // Key is body part name, value is the input string
+    const [values, setValues] = useState<Record<string, string>>({});
+    const [date, setDate] = useState(format(new Date(), "yyyy-MM-dd"));
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
+    const handleValueChange = (part: string, val: string) => {
+        setValues(prev => ({ ...prev, [part]: val }));
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!partName || !value) {
-            setError("Please fill in all fields");
+
+        // Filter out empty values
+        const entriesToSave = Object.entries(values).filter(([_, val]) => val && val.trim() !== "");
+
+        if (entriesToSave.length === 0) {
+            setError("Please enter at least one measurement");
             return;
         }
 
@@ -58,20 +60,26 @@ export function MeasurementEntryForm({ onEntryAdded }: MeasurementEntryFormProps
 
             if (!user) throw new Error("No user logged in");
 
+            // Prepare batch insert
+            const rows = entriesToSave.map(([part, val]) => ({
+                user_id: user.id,
+                part_name: part,
+                value: parseFloat(val),
+                // Simple logic for unit: kg/lbs for Weight, cm/in for others. 
+                // For now hardcoding 'kg' first if Weight, else 'cm'. 
+                // Real implementation might need per-field unit toggle or global preference.
+                unit: part === "Weight" ? "kg" : "cm",
+                created_at: new Date(date).toISOString(),
+            }));
+
             const { error: insertError } = await supabase
                 .from("body_measurements")
-                .insert({
-                    user_id: user.id,
-                    part_name: partName,
-                    value: parseFloat(value),
-                    unit: unit,
-                });
+                .insert(rows);
 
             if (insertError) throw insertError;
 
             setSuccess(true);
-            setValue("");
-            // Reset success message after 3 seconds
+            setValues({}); // Clear form
             setTimeout(() => setSuccess(false), 3000);
             onEntryAdded();
         } catch (err: any) {
@@ -87,55 +95,43 @@ export function MeasurementEntryForm({ onEntryAdded }: MeasurementEntryFormProps
             <CardHeader>
                 <CardTitle className="text-lg font-semibold text-white flex items-center gap-2">
                     <Ruler className="w-5 h-5 text-emerald-500" />
-                    Log Measurement
+                    Log Day
                 </CardTitle>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-6">
+
                     <div className="space-y-2">
-                        <Label htmlFor="body-part" className="text-neutral-400">Body Part</Label>
-                        <Select value={partName} onValueChange={setPartName}>
-                            <SelectTrigger id="body-part" className="bg-neutral-950 border-neutral-800 text-white">
-                                <SelectValue placeholder="Select body part" />
-                            </SelectTrigger>
-                            <SelectContent className="bg-neutral-900 border-neutral-800">
-                                {BODY_PARTS.map((part) => (
-                                    <SelectItem key={part} value={part} className="text-neutral-300 focus:bg-neutral-800 focus:text-white">
-                                        {part}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                        <Label htmlFor="date" className="text-neutral-400 flex items-center gap-2">
+                            <Calendar className="w-4 h-4" /> Date
+                        </Label>
+                        <Input
+                            id="date"
+                            type="date"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
+                            className="bg-neutral-950 border-neutral-800 text-white"
+                        />
                     </div>
 
-                    <div className="flex gap-4">
-                        <div className="flex-1 space-y-2">
-                            <Label htmlFor="value" className="text-neutral-400">Value</Label>
-                            <Input
-                                id="value"
-                                type="number"
-                                step="0.1"
-                                placeholder="0.0"
-                                value={value}
-                                onChange={(e) => setValue(e.target.value)}
-                                className="bg-neutral-950 border-neutral-800 text-white"
-                                inputMode="decimal"
-                            />
-                        </div>
-                        <div className="w-24 space-y-2">
-                            <Label htmlFor="unit" className="text-neutral-400">Unit</Label>
-                            <Select value={unit} onValueChange={setUnit}>
-                                <SelectTrigger id="unit" className="bg-neutral-950 border-neutral-800 text-white">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent className="bg-neutral-900 border-neutral-800">
-                                    <SelectItem value="cm" className="text-neutral-300 focus:bg-neutral-800 focus:text-white">cm</SelectItem>
-                                    <SelectItem value="in" className="text-neutral-300 focus:bg-neutral-800 focus:text-white">in</SelectItem>
-                                    <SelectItem value="kg" className="text-neutral-300 focus:bg-neutral-800 focus:text-white">kg</SelectItem>
-                                    <SelectItem value="lbs" className="text-neutral-300 focus:bg-neutral-800 focus:text-white">lbs</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        {BODY_PARTS.map((part) => (
+                            <div key={part} className="space-y-1">
+                                <Label htmlFor={`input-${part}`} className="text-xs text-neutral-500 truncate block" title={part}>
+                                    {part}
+                                </Label>
+                                <Input
+                                    id={`input-${part}`}
+                                    type="number"
+                                    step="0.1"
+                                    placeholder="-"
+                                    value={values[part] || ""}
+                                    onChange={(e) => handleValueChange(part, e.target.value)}
+                                    className="bg-neutral-950 border-neutral-800 text-white h-9 px-2 text-sm"
+                                    inputMode="decimal"
+                                />
+                            </div>
+                        ))}
                     </div>
 
                     {error && (
@@ -147,14 +143,14 @@ export function MeasurementEntryForm({ onEntryAdded }: MeasurementEntryFormProps
 
                     <Button
                         type="submit"
-                        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white transition-all"
+                        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white transition-all sticky bottom-4 shadow-lg shadow-neutral-950/50"
                         disabled={loading}
                     >
                         {loading ? "Saving..." : success ? (
                             <span className="flex items-center gap-2">
                                 <Check className="w-4 h-4" /> Saved
                             </span>
-                        ) : "Log Entry"}
+                        ) : "Save Entry"}
                     </Button>
                 </form>
             </CardContent>
