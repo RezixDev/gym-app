@@ -17,8 +17,8 @@ export function BodyMeasurements() {
                     <Scale className="w-6 h-6 text-emerald-500" />
                 </div>
                 <div>
-                    <h1 className="text-2xl font-bold text-white">Body Metrics</h1>
-                    <p className="text-neutral-400 text-sm">Track your growth</p>
+                    <h1 className="text-2xl font-bold text-foreground">Body Metrics</h1>
+                    <p className="text-muted-foreground text-sm">Track your growth</p>
                 </div>
             </header>
 

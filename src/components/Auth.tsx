@@ -44,27 +44,27 @@ export function Auth() {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-neutral-950 p-4">
+        <div className="flex min-h-screen items-center justify-center bg-background p-4">
             <div className="w-full max-w-md space-y-4">
                 <div className="flex flex-col items-center space-y-2 text-center">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-900 border border-neutral-800">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary border border-border">
                         <Dumbbell className="h-6 w-6 text-emerald-500" />
                     </div>
-                    <h1 className="text-2xl font-bold tracking-tight text-white">GymTrack</h1>
-                    <p className="text-sm text-neutral-400">Track your progress, reach your goals.</p>
+                    <h1 className="text-2xl font-bold tracking-tight text-foreground">GymTrack</h1>
+                    <p className="text-sm text-muted-foreground">Track your progress, reach your goals.</p>
                 </div>
 
                 <Tabs defaultValue="login" className="w-full">
-                    <TabsList className="grid w-full grid-cols-2 bg-neutral-900 text-neutral-400">
-                        <TabsTrigger value="login" className="data-[state=active]:bg-neutral-800 data-[state=active]:text-white">Login</TabsTrigger>
-                        <TabsTrigger value="signup" className="data-[state=active]:bg-neutral-800 data-[state=active]:text-white">Sign Up</TabsTrigger>
+                    <TabsList className="grid w-full grid-cols-2 bg-muted text-muted-foreground">
+                        <TabsTrigger value="login" className="data-[state=active]:bg-background data-[state=active]:text-foreground">Login</TabsTrigger>
+                        <TabsTrigger value="signup" className="data-[state=active]:bg-background data-[state=active]:text-foreground">Sign Up</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="login">
-                        <Card className="border-neutral-800 bg-neutral-900 text-neutral-100">
+                        <Card className="border-border bg-card text-card-foreground">
                             <CardHeader>
                                 <CardTitle>Welcome back</CardTitle>
-                                <CardDescription className="text-neutral-400">Enter your credentials to access your account.</CardDescription>
+                                <CardDescription className="text-muted-foreground">Enter your credentials to access your account.</CardDescription>
                             </CardHeader>
                             <form onSubmit={handleLogin}>
                                 <CardContent className="space-y-4">
@@ -88,7 +88,7 @@ export function Auth() {
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                             required
-                                            className="bg-neutral-950 border-neutral-800 text-white placeholder:text-neutral-600 focus-visible:ring-emerald-500"
+                                            className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
                                         />
                                     </div>
                                     {error && <p className="text-sm text-red-500">{error}</p>}
@@ -103,10 +103,10 @@ export function Auth() {
                     </TabsContent>
 
                     <TabsContent value="signup">
-                        <Card className="border-neutral-800 bg-neutral-900 text-neutral-100">
+                        <Card className="border-border bg-card text-card-foreground">
                             <CardHeader>
                                 <CardTitle>Create an account</CardTitle>
-                                <CardDescription className="text-neutral-400">Enter your details to create a new account.</CardDescription>
+                                <CardDescription className="text-muted-foreground">Enter your details to create a new account.</CardDescription>
                             </CardHeader>
                             <form onSubmit={handleSignUp}>
                                 <CardContent className="space-y-4">
@@ -119,7 +119,7 @@ export function Auth() {
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
                                             required
-                                            className="bg-neutral-950 border-neutral-800 text-white placeholder:text-neutral-600 focus-visible:ring-emerald-500"
+                                            className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -131,7 +131,7 @@ export function Auth() {
                                             value={username}
                                             onChange={(e) => setUsername(e.target.value)}
                                             required
-                                            className="bg-neutral-950 border-neutral-800 text-white placeholder:text-neutral-600 focus-visible:ring-emerald-500"
+                                            className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
                                         />
                                     </div>
                                     <div className="space-y-2">

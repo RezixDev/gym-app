@@ -1,6 +1,7 @@
 import { Layout } from "@/components/Layout";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { Auth } from "@/components/Auth";
+import { ThemeProvider } from "@/components/theme-provider";
 
 function ProtectedApp() {
   const { session, loading } = useAuth();
@@ -23,7 +24,9 @@ function ProtectedApp() {
 function App() {
   return (
     <AuthProvider>
-      <ProtectedApp />
+      <ThemeProvider attribute="class" defaultTheme="dark" storageKey="vite-ui-theme">
+        <ProtectedApp />
+      </ThemeProvider>
     </AuthProvider>
   );
 }

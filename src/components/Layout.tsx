@@ -40,18 +40,18 @@ export function Layout() {
     };
 
     return (
-        <div className="min-h-screen bg-neutral-950 text-neutral-100 font-sans">
+        <div className="min-h-screen bg-background text-foreground font-sans">
             {/* Main Content Area */}
             <main className="pb-24 pt- safe-top">
                 {renderContent()}
             </main>
 
             {/* Bottom Navigation */}
-            <nav className="fixed bottom-0 left-0 right-0 bg-neutral-900/90 backdrop-blur-lg border-t border-neutral-800 pb-safe-bottom z-50">
+            <nav className="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-lg border-t border-border pb-safe-bottom z-50">
                 <div className="flex justify-around items-center h-16">
                     <button
                         onClick={() => setActiveTab("dashboard")}
-                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "dashboard" ? "text-emerald-500" : "text-neutral-500 hover:text-neutral-300"
+                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "dashboard" ? "text-emerald-500" : "text-muted-foreground hover:text-foreground"
                             }`}
                     >
                         <Home className="w-6 h-6" />
@@ -60,7 +60,7 @@ export function Layout() {
 
                     <button
                         onClick={() => setActiveTab("workouts")}
-                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "workouts" ? "text-emerald-500" : "text-neutral-500 hover:text-neutral-300"
+                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "workouts" ? "text-emerald-500" : "text-muted-foreground hover:text-foreground"
                             }`}
                     >
                         <Dumbbell className="w-6 h-6" />
@@ -69,7 +69,7 @@ export function Layout() {
 
                     <button
                         onClick={() => setActiveTab("meal_builder")}
-                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "meal_builder" ? "text-emerald-500" : "text-neutral-500 hover:text-neutral-300"
+                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "meal_builder" ? "text-emerald-500" : "text-muted-foreground hover:text-foreground"
                             }`}
                     >
                         <ChefHat className="w-6 h-6" />
@@ -78,7 +78,7 @@ export function Layout() {
 
                     <button
                         onClick={() => setActiveTab("exercises")}
-                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "exercises" ? "text-emerald-500" : "text-neutral-500 hover:text-neutral-300"
+                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "exercises" ? "text-emerald-500" : "text-muted-foreground hover:text-foreground"
                             }`}
                     >
                         <List className="w-6 h-6" />
@@ -88,7 +88,7 @@ export function Layout() {
                     {/* Analytics - Desktop Only */}
                     <button
                         onClick={() => setActiveTab("analytics")}
-                        className={`hidden md:flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "analytics" ? "text-emerald-500" : "text-neutral-500 hover:text-neutral-300"
+                        className={`hidden md:flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "analytics" ? "text-emerald-500" : "text-muted-foreground hover:text-foreground"
                             }`}
                     >
                         <LineChart className="w-6 h-6" />
@@ -97,7 +97,7 @@ export function Layout() {
 
                     <button
                         onClick={() => setActiveTab("measurements")}
-                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "measurements" ? "text-emerald-500" : "text-neutral-500 hover:text-neutral-300"
+                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "measurements" ? "text-emerald-500" : "text-muted-foreground hover:text-foreground"
                             }`}
                     >
                         <Scale className="w-6 h-6" />
@@ -106,7 +106,7 @@ export function Layout() {
 
                     <button
                         onClick={() => setActiveTab("profile")}
-                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "profile" ? "text-emerald-500" : "text-neutral-500 hover:text-neutral-300"
+                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "profile" ? "text-emerald-500" : "text-muted-foreground hover:text-foreground"
                             }`}
                     >
                         <User className="w-6 h-6" />

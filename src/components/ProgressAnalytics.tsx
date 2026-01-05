@@ -161,7 +161,7 @@ export function ProgressAnalytics() {
     }
 
     return (
-        <div className="pb-24 pt- safe-top min-h-screen bg-neutral-950 text-neutral-100 p-4">
+        <div className="pb-24 pt- safe-top min-h-screen bg-background text-foreground p-4">
             <h1 className="text-2xl font-bold text-emerald-500 mb-6 font-display">Step Progress</h1>
 
             <div className="space-y-6">
@@ -172,7 +172,7 @@ export function ProgressAnalytics() {
                         <select
                             value={selectedExerciseId}
                             onChange={(e) => setSelectedExerciseId(e.target.value)}
-                            className="w-full bg-neutral-900 border border-neutral-800 rounded-lg p-3 text-neutral-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 appearance-none"
+                            className="w-full bg-card border border-border rounded-lg p-3 text-card-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500/50 appearance-none"
                         >
                             {exercises.map((ex) => (
                                 <option key={ex.id} value={ex.id}>{ex.name}</option>
@@ -181,23 +181,23 @@ export function ProgressAnalytics() {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider">Metric</label>
-                        <div className="flex bg-neutral-900 rounded-lg p-1 border border-neutral-800">
+                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Metric</label>
+                        <div className="flex bg-muted rounded-lg p-1 border border-border">
                             <button
                                 onClick={() => setMetric("1rm")}
-                                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${metric === "1rm" ? "bg-emerald-500/20 text-emerald-500" : "text-neutral-400 hover:text-neutral-300"}`}
+                                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${metric === "1rm" ? "bg-background shadow-sm text-emerald-500" : "text-muted-foreground hover:text-foreground"}`}
                             >
                                 Est. 1RM
                             </button>
                             <button
                                 onClick={() => setMetric("volume")}
-                                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${metric === "volume" ? "bg-emerald-500/20 text-emerald-500" : "text-neutral-400 hover:text-neutral-300"}`}
+                                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${metric === "volume" ? "bg-background shadow-sm text-emerald-500" : "text-muted-foreground hover:text-foreground"}`}
                             >
                                 Volume
                             </button>
                             <button
                                 onClick={() => setMetric("avgWeight")}
-                                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${metric === "avgWeight" ? "bg-emerald-500/20 text-emerald-500" : "text-neutral-400 hover:text-neutral-300"}`}
+                                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${metric === "avgWeight" ? "bg-background shadow-sm text-emerald-500" : "text-muted-foreground hover:text-foreground"}`}
                             >
                                 Avg Weight
                             </button>
@@ -206,25 +206,25 @@ export function ProgressAnalytics() {
                 </div>
 
                 {/* Chart */}
-                <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-4 h-[400px]">
+                <div className="bg-card border border-border rounded-xl p-4 h-[400px]">
                     {loadingData ? (
                         <div className="h-full flex items-center justify-center">
-                            <Loader2 className="animate-spin text-neutral-600" />
+                            <Loader2 className="animate-spin text-muted-foreground" />
                         </div>
                     ) : chartData.length > 0 ? (
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#262626" vertical={false} />
+                                <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} />
                                 <XAxis
                                     dataKey="date"
-                                    stroke="#525252"
+                                    stroke="hsl(var(--muted-foreground))"
                                     tick={{ fontSize: 12 }}
                                     tickLine={false}
                                     axisLine={false}
                                     dy={10}
                                 />
                                 <YAxis
-                                    stroke="#525252"
+                                    stroke="hsl(var(--muted-foreground))"
                                     tick={{ fontSize: 12 }}
                                     tickLine={false}
                                     axisLine={false}
@@ -232,12 +232,12 @@ export function ProgressAnalytics() {
                                 />
                                 <Tooltip
                                     contentStyle={{
-                                        backgroundColor: '#171717',
-                                        border: '1px solid #262626',
+                                        backgroundColor: 'hsl(var(--popover))',
+                                        border: '1px solid hsl(var(--border))',
                                         borderRadius: '8px',
-                                        color: '#E5E5E5'
+                                        color: 'hsl(var(--popover-foreground))'
                                     }}
-                                    itemStyle={{ color: '#E5E5E5' }}
+                                    itemStyle={{ color: 'hsl(var(--popover-foreground))' }}
                                 />
                                 <Line
                                     type="monotone"

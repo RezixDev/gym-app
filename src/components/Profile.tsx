@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { LogOut, Settings, Activity, User as UserIcon, LineChart } from "lucide-react";
+import { LogOut, Settings, Activity, User as UserIcon, LineChart, Sun, Moon, Monitor } from "lucide-react";
+import { useTheme } from "next-themes";
 import { toast } from "sonner";
 
 interface ProfileProps {
@@ -24,6 +25,7 @@ export function Profile({ onNavigate }: ProfileProps) {
     const [calorieGoal, setCalorieGoal] = useState<string>("");
     const [proteinGoal, setProteinGoal] = useState<string>("");
     const [loading, setLoading] = useState(true);
+    const { theme, setTheme } = useTheme();
 
     useEffect(() => {
         if (!user) return;
@@ -126,23 +128,23 @@ export function Profile({ onNavigate }: ProfileProps) {
                     </AvatarFallback>
                 </Avatar>
                 <div>
-                    <h1 className="text-2xl font-bold text-white">Profile</h1>
-                    <p className="text-neutral-400 text-sm">{user.email}</p>
+                    <h1 className="text-2xl font-bold text-foreground">Profile</h1>
+                    <p className="text-muted-foreground text-sm">{user.email}</p>
                 </div>
             </header>
 
             <div className="space-y-4">
-                <Card className="bg-neutral-900 border-neutral-800">
+                <Card className="bg-card border-border">
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-lg flex items-center gap-2 text-white">
+                        <CardTitle className="text-lg flex items-center gap-2 text-foreground">
                             <Activity className="h-5 w-5 text-emerald-500" />
                             Statistics
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex justify-between items-center py-2">
-                            <span className="text-neutral-400">Total Workouts</span>
-                            <span className="text-2xl font-bold text-white font-mono">{workoutCount}</span>
+                            <span className="text-muted-foreground">Total Workouts</span>
+                            <span className="text-2xl font-bold text-foreground font-mono">{workoutCount}</span>
                         </div>
                     </CardContent>
                 </Card>
@@ -151,7 +153,7 @@ export function Profile({ onNavigate }: ProfileProps) {
                 <div className="md:hidden">
                     <Button
                         variant="outline"
-                        className="w-full justify-start text-neutral-300 border-neutral-800 bg-neutral-900 hover:bg-neutral-800 hover:text-white"
+                        className="w-full justify-start text-muted-foreground border-border bg-card hover:bg-accent hover:text-accent-foreground"
                         onClick={() => onNavigate?.("analytics")}
                     >
                         <LineChart className="mr-2 h-4 w-4 text-emerald-500" />
@@ -159,9 +161,9 @@ export function Profile({ onNavigate }: ProfileProps) {
                     </Button>
                 </div>
 
-                <Card className="bg-neutral-900 border-neutral-800">
+                <Card className="bg-card border-border">
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-lg flex items-center gap-2 text-white">
+                        <CardTitle className="text-lg flex items-center gap-2 text-foreground">
                             <UserIcon className="h-5 w-5 text-emerald-500" />
                             Body Stats
                         </CardTitle>
@@ -169,27 +171,27 @@ export function Profile({ onNavigate }: ProfileProps) {
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="weight" className="text-neutral-400">Weight ({unitPreference})</Label>
+                                <Label htmlFor="weight" className="text-muted-foreground">Weight ({unitPreference})</Label>
                                 <Input
                                     id="weight"
                                     type="number"
                                     value={weight}
                                     onChange={(e) => handleStatChange("weight", e.target.value)}
                                     onBlur={(e) => handleStatBlur("weight", e.target.value)}
-                                    className="bg-neutral-950 border-neutral-800 text-white"
+                                    className="bg-background border-border text-foreground"
                                     placeholder="0"
                                     inputMode="decimal"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="height" className="text-neutral-400">Height (cm)</Label>
+                                <Label htmlFor="height" className="text-muted-foreground">Height (cm)</Label>
                                 <Input
                                     id="height"
                                     type="number"
                                     value={height}
                                     onChange={(e) => handleStatChange("height", e.target.value)}
                                     onBlur={(e) => handleStatBlur("height", e.target.value)}
-                                    className="bg-neutral-950 border-neutral-800 text-white"
+                                    className="bg-background border-border text-foreground"
                                     placeholder="0"
                                     inputMode="decimal"
                                 />
@@ -198,39 +200,39 @@ export function Profile({ onNavigate }: ProfileProps) {
                     </CardContent>
                 </Card>
 
-                <Card className="bg-neutral-900 border-neutral-800">
+                <Card className="bg-card border-border">
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-lg flex items-center gap-2 text-white">
+                        <CardTitle className="text-lg flex items-center gap-2 text-foreground">
                             <Settings className="h-5 w-5 text-emerald-500" />
                             Settings
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-6">
                         <div className="space-y-4">
-                            <h3 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">Nutrition Goals</h3>
+                            <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Nutrition Goals</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="calories" className="text-neutral-400">Daily Calories (kcal)</Label>
+                                    <Label htmlFor="calories" className="text-muted-foreground">Daily Calories (kcal)</Label>
                                     <Input
                                         id="calories"
                                         type="number"
                                         value={calorieGoal}
                                         onChange={(e) => handleStatChange("calorie_goal", e.target.value)}
                                         onBlur={(e) => handleStatBlur("calorie_goal", e.target.value)}
-                                        className="bg-neutral-950 border-neutral-800 text-white"
+                                        className="bg-background border-border text-foreground"
                                         placeholder="2000"
                                         inputMode="numeric"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="protein" className="text-neutral-400">Daily Protein (g)</Label>
+                                    <Label htmlFor="protein" className="text-muted-foreground">Daily Protein (g)</Label>
                                     <Input
                                         id="protein"
                                         type="number"
                                         value={proteinGoal}
                                         onChange={(e) => handleStatChange("protein_goal", e.target.value)}
                                         onBlur={(e) => handleStatBlur("protein_goal", e.target.value)}
-                                        className="bg-neutral-950 border-neutral-800 text-white"
+                                        className="bg-background border-border text-foreground"
                                         placeholder="150"
                                         inputMode="numeric"
                                     />
@@ -238,10 +240,10 @@ export function Profile({ onNavigate }: ProfileProps) {
                             </div>
                         </div>
 
-                        <div className="flex items-center justify-between space-x-2 bg-neutral-950 p-3 rounded-lg border border-neutral-800">
+                        <div className="flex items-center justify-between space-x-2 bg-background p-3 rounded-lg border border-border">
                             <Label htmlFor="unit-mode" className="flex flex-col space-y-1 cursor-pointer">
-                                <span className="text-white font-medium">Unit Preference</span>
-                                <span className="font-normal text-xs text-neutral-500">
+                                <span className="text-foreground font-medium">Unit Preference</span>
+                                <span className="font-normal text-xs text-muted-foreground">
                                     Show weights in Lbs instead of Kg
                                 </span>
                             </Label>
@@ -250,8 +252,48 @@ export function Profile({ onNavigate }: ProfileProps) {
                                 checked={unitPreference === "lbs"}
                                 onCheckedChange={handleUnitChange}
                                 disabled={loading}
-                                className="data-[state=checked]:bg-emerald-500 data-[state=unchecked]:bg-neutral-700"
+                                className="data-[state=checked]:bg-emerald-500 data-[state=unchecked]:bg-secondary"
                             />
+                        </div>
+
+                        <div className="space-y-3 pt-4 border-t border-border">
+                            <div className="space-y-0.5">
+                                <label className="text-sm font-medium text-foreground">Appearance</label>
+                                <p className="text-xs text-muted-foreground">Customize how the app looks</p>
+                            </div>
+
+                            <div className="grid grid-cols-3 gap-2">
+                                <button
+                                    onClick={() => setTheme("light")}
+                                    className={`flex flex-col items-center justify-center p-3 rounded-lg border transition-all ${theme === 'light'
+                                        ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-500'
+                                        : 'bg-background border-border text-muted-foreground hover:border-accent-foreground/50'
+                                        }`}
+                                >
+                                    <Sun className="w-5 h-5 mb-2" />
+                                    <span className="text-xs font-medium">Light</span>
+                                </button>
+                                <button
+                                    onClick={() => setTheme("dark")}
+                                    className={`flex flex-col items-center justify-center p-3 rounded-lg border transition-all ${theme === 'dark'
+                                        ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-500'
+                                        : 'bg-background border-border text-muted-foreground hover:border-accent-foreground/50'
+                                        }`}
+                                >
+                                    <Moon className="w-5 h-5 mb-2" />
+                                    <span className="text-xs font-medium">Dark</span>
+                                </button>
+                                <button
+                                    onClick={() => setTheme("system")}
+                                    className={`flex flex-col items-center justify-center p-3 rounded-lg border transition-all ${theme === 'system'
+                                        ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-500'
+                                        : 'bg-background border-border text-muted-foreground hover:border-accent-foreground/50'
+                                        }`}
+                                >
+                                    <Monitor className="w-5 h-5 mb-2" />
+                                    <span className="text-xs font-medium">System</span>
+                                </button>
+                            </div>
                         </div>
                     </CardContent>
                 </Card>

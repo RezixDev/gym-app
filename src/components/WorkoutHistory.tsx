@@ -88,9 +88,9 @@ export function WorkoutHistory({ onStartWorkout }: { onStartWorkout: () => void 
 
     return (
         <div className="flex flex-col h-[calc(100vh-8rem)]">
-            <div className="p-4 space-y-4 border-b border-neutral-800">
+            <div className="p-4 space-y-4 border-b border-border">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-bold text-white">History</h1>
+                    <h1 className="text-2xl font-bold text-foreground">History</h1>
                     <Button
                         onClick={onStartWorkout}
                         className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-900/20"
@@ -103,11 +103,11 @@ export function WorkoutHistory({ onStartWorkout }: { onStartWorkout: () => void 
 
             <div className="flex-1 overflow-auto p-4">
                 {loading ? (
-                    <div className="flex items-center justify-center h-48 text-neutral-500">
+                    <div className="flex items-center justify-center h-48 text-muted-foreground">
                         Loading history...
                     </div>
                 ) : workouts.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-64 text-neutral-500 border-2 border-dashed border-neutral-800 rounded-lg">
+                    <div className="flex flex-col items-center justify-center h-64 text-muted-foreground border-2 border-dashed border-border rounded-lg">
                         <Dumbbell className="w-12 h-12 mb-4 opacity-50" />
                         <p>No workouts logged yet.</p>
                         <Button
@@ -124,22 +124,22 @@ export function WorkoutHistory({ onStartWorkout }: { onStartWorkout: () => void 
                             <AccordionItem
                                 key={workout.id}
                                 value={workout.id}
-                                className="bg-neutral-900 border border-neutral-800 rounded-lg overflow-hidden data-[state=open]:border-neutral-700"
+                                className="bg-card border border-border rounded-lg overflow-hidden data-[state=open]:border-accent"
                             >
-                                <AccordionTrigger className="px-4 py-4 hover:no-underline hover:bg-neutral-800/50">
-                                    <div className="flex items-center space-x-3 text-neutral-200">
-                                        <Calendar className="w-4 h-4 text-neutral-500" />
+                                <AccordionTrigger className="px-4 py-4 hover:no-underline hover:bg-muted/50">
+                                    <div className="flex items-center space-x-3 text-card-foreground">
+                                        <Calendar className="w-4 h-4 text-muted-foreground" />
                                         <span>{formatDate(workout.start_time)}</span>
                                     </div>
                                 </AccordionTrigger>
-                                <AccordionContent className="px-4 pb-4 bg-neutral-900/50">
+                                <AccordionContent className="px-4 pb-4 bg-muted/20">
                                     <Table>
                                         <TableHeader>
-                                            <TableRow className="border-neutral-800 hover:bg-transparent">
-                                                <TableHead className="text-neutral-500">Exercise</TableHead>
-                                                <TableHead className="text-center text-neutral-500">Set</TableHead>
-                                                <TableHead className="text-center text-neutral-500">kg</TableHead>
-                                                <TableHead className="text-center text-neutral-500">Reps</TableHead>
+                                            <TableRow className="border-border hover:bg-transparent">
+                                                <TableHead className="text-muted-foreground">Exercise</TableHead>
+                                                <TableHead className="text-center text-muted-foreground">Set</TableHead>
+                                                <TableHead className="text-center text-muted-foreground">kg</TableHead>
+                                                <TableHead className="text-center text-muted-foreground">Reps</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
@@ -150,17 +150,17 @@ export function WorkoutHistory({ onStartWorkout }: { onStartWorkout: () => void 
                                                     return nameA.localeCompare(nameB) || a.set_number - b.set_number;
                                                 })
                                                 .map((set) => (
-                                                    <TableRow key={set.id} className="border-neutral-800 hover:bg-neutral-800/30">
-                                                        <TableCell className="font-medium text-neutral-300">
+                                                    <TableRow key={set.id} className="border-border hover:bg-muted/50">
+                                                        <TableCell className="font-medium text-foreground">
                                                             {set.exercises?.name || "Unknown Exercise"}
                                                         </TableCell>
-                                                        <TableCell className="text-center text-neutral-400">
+                                                        <TableCell className="text-center text-muted-foreground">
                                                             {set.set_number}
                                                         </TableCell>
-                                                        <TableCell className="text-center text-neutral-400">
+                                                        <TableCell className="text-center text-muted-foreground">
                                                             {set.weight}
                                                         </TableCell>
-                                                        <TableCell className="text-center text-neutral-400">
+                                                        <TableCell className="text-center text-muted-foreground">
                                                             {set.reps}
                                                         </TableCell>
                                                     </TableRow>

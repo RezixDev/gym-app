@@ -95,17 +95,17 @@ export function ExerciseLibrary({ onSelect }: ExerciseLibraryProps) {
         <div className="flex flex-col h-[calc(100vh-8rem)]">
             {/* Header */}
             <div className="p-4 space-y-4">
-                <h1 className="text-3xl font-bold text-white">Exercise Library</h1>
+                <h1 className="text-3xl font-bold text-foreground">Exercise Library</h1>
 
                 {/* Search Bar */}
                 <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                         type="text"
                         placeholder="Search exercises..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10 bg-neutral-900 border-neutral-800 text-neutral-100 placeholder:text-neutral-500 focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500"
+                        className="pl-10 bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500"
                     />
                 </div>
             </div>
@@ -114,7 +114,7 @@ export function ExerciseLibrary({ onSelect }: ExerciseLibraryProps) {
             <ScrollArea className="flex-1 px-4">
                 {loading ? (
                     <div className="flex items-center justify-center py-12">
-                        <div className="animate-pulse text-neutral-400">Loading exercises...</div>
+                        <div className="animate-pulse text-muted-foreground">Loading exercises...</div>
                     </div>
                 ) : error ? (
                     <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -128,8 +128,8 @@ export function ExerciseLibrary({ onSelect }: ExerciseLibraryProps) {
                     </div>
                 ) : filteredExercises.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12 text-center">
-                        <Dumbbell className="h-12 w-12 text-neutral-600 mb-4" />
-                        <p className="text-neutral-400">
+                        <Dumbbell className="h-12 w-12 text-muted-foreground mb-4" />
+                        <p className="text-muted-foreground">
                             {searchQuery
                                 ? "No exercises found matching your search."
                                 : "No exercises available yet."}
@@ -141,14 +141,14 @@ export function ExerciseLibrary({ onSelect }: ExerciseLibraryProps) {
                             <Card
                                 key={exercise.id}
                                 onClick={() => onSelect?.(exercise)}
-                                className={`bg-neutral-900 border-neutral-800 hover:border-neutral-700 transition-colors cursor-pointer ${onSelect ? 'hover:bg-neutral-800' : ''}`}
+                                className={`bg-card border-border hover:border-accent transition-colors cursor-pointer ${onSelect ? 'hover:bg-accent' : ''}`}
                             >
                                 <CardContent className="flex items-center justify-between py-4">
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="text-base font-semibold text-neutral-100 truncate">
+                                        <h3 className="text-base font-semibold text-card-foreground truncate">
                                             {exercise.name}
                                         </h3>
-                                        <p className="text-sm text-neutral-400 mt-0.5">
+                                        <p className="text-sm text-muted-foreground mt-0.5">
                                             {exercise.muscle_group || "General"}
                                         </p>
                                     </div>
@@ -164,7 +164,7 @@ export function ExerciseLibrary({ onSelect }: ExerciseLibraryProps) {
 
             {/* Results count */}
             {!loading && !error && exercises.length > 0 && (
-                <div className="px-4 py-2 text-center text-xs text-neutral-500 border-t border-neutral-800">
+                <div className="px-4 py-2 text-center text-xs text-muted-foreground border-t border-border">
                     Showing {filteredExercises.length} of {exercises.length} exercises
                 </div>
             )}

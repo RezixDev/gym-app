@@ -54,7 +54,7 @@ export function NutritionSummary({ refreshTrigger }: { refreshTrigger?: number }
 
     if (loading) {
         return (
-            <Card className="bg-neutral-900 border-neutral-800">
+            <Card className="bg-card border-border">
                 <CardContent className="flex items-center justify-center h-48">
                     <Loader2 className="w-6 h-6 animate-spin text-emerald-500" />
                 </CardContent>
@@ -66,33 +66,33 @@ export function NutritionSummary({ refreshTrigger }: { refreshTrigger?: number }
     const proteinPercent = Math.min(100, (stats.protein / goals.protein) * 100);
 
     return (
-        <Card className="bg-neutral-900 border-neutral-800">
+        <Card className="bg-card border-border">
             <CardHeader className="pb-2">
-                <CardTitle className="text-lg font-semibold text-white">Daily Nutrition</CardTitle>
+                <CardTitle className="text-lg font-semibold text-card-foreground">Daily Nutrition</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
                 <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                        <span className="text-neutral-400 flex items-center gap-1">
+                        <span className="text-muted-foreground flex items-center gap-1">
                             <Flame className="w-4 h-4 text-orange-500" /> Calories
                         </span>
-                        <span className="text-white font-medium">
-                            {stats.calories} / <span className="text-neutral-500">{goals.calories}</span>
+                        <span className="text-foreground font-medium">
+                            {stats.calories} / <span className="text-muted-foreground">{goals.calories}</span>
                         </span>
                     </div>
-                    <Progress value={caloriePercent} className="h-2 bg-neutral-800" indicatorClassName="bg-orange-500" />
+                    <Progress value={caloriePercent} className="h-2 bg-secondary" indicatorClassName="bg-orange-500" />
                 </div>
 
                 <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                        <span className="text-neutral-400 flex items-center gap-1">
+                        <span className="text-muted-foreground flex items-center gap-1">
                             <Beef className="w-4 h-4 text-red-500" /> Protein
                         </span>
-                        <span className="text-white font-medium">
-                            {stats.protein}g / <span className="text-neutral-500">{goals.protein}g</span>
+                        <span className="text-foreground font-medium">
+                            {stats.protein}g / <span className="text-muted-foreground">{goals.protein}g</span>
                         </span>
                     </div>
-                    <Progress value={proteinPercent} className="h-2 bg-neutral-800" indicatorClassName="bg-red-500" />
+                    <Progress value={proteinPercent} className="h-2 bg-secondary" indicatorClassName="bg-red-500" />
                 </div>
             </CardContent>
         </Card>

@@ -152,9 +152,9 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
 
     return (
         <div className="flex flex-col h-[calc(100vh-8rem)]">
-            <div className="p-4 space-y-4 border-b border-neutral-800">
+            <div className="p-4 space-y-4 border-b border-border">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-bold text-white">Active Workout</h1>
+                    <h1 className="text-2xl font-bold text-foreground">Active Workout</h1>
                     <Button
                         onClick={handleFinish}
                         disabled={isSubmitting || exercises.length === 0}
@@ -168,30 +168,30 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
 
             <div className="flex-1 overflow-auto p-4 space-y-4">
                 {exercises.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-64 text-neutral-500 border-2 border-dashed border-neutral-800 rounded-lg">
+                    <div className="flex flex-col items-center justify-center h-64 text-muted-foreground border-2 border-dashed border-border rounded-lg">
                         <Dumbbell className="w-12 h-12 mb-4 opacity-50" />
                         <p>No exercises added yet.</p>
                         <p className="text-sm">Start by adding an exercise.</p>
                     </div>
                 ) : (
                     exercises.map((exercise) => (
-                        <Card key={exercise.id} className="bg-neutral-900 border-neutral-800">
+                        <Card key={exercise.id} className="bg-card border-border">
                             <CardHeader className="flex flex-row items-center justify-between py-4">
-                                <CardTitle className="text-lg font-semibold text-neutral-100">
+                                <CardTitle className="text-lg font-semibold text-card-foreground">
                                     {exercise.name}
                                 </CardTitle>
                                 <Button
                                     variant="ghost"
                                     size="icon"
                                     onClick={() => removeExercise(exercise.id)}
-                                    className="text-neutral-500 hover:text-red-500"
+                                    className="text-muted-foreground hover:text-red-500"
                                 >
                                     <Trash2 className="w-4 h-4" />
                                 </Button>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="space-y-2">
-                                    <div className="grid grid-cols-10 gap-2 text-xs text-neutral-500 uppercase font-medium text-center">
+                                    <div className="grid grid-cols-10 gap-2 text-xs text-muted-foreground uppercase font-medium text-center">
                                         <div className="col-span-1">Set</div>
                                         <div className="col-span-4">kg</div>
                                         <div className="col-span-4">Reps</div>
@@ -200,7 +200,7 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
                                     {exercise.sets.map((set, idx) => (
                                         <div key={idx} className="grid grid-cols-10 gap-2 items-center">
                                             <div className="col-span-1 flex items-center justify-center">
-                                                <div className="w-6 h-6 rounded-full bg-neutral-800 text-neutral-400 flex items-center justify-center text-xs font-bold">
+                                                <div className="w-6 h-6 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center text-xs font-bold">
                                                     {idx + 1}
                                                 </div>
                                             </div>
@@ -211,7 +211,7 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
                                                     placeholder="0"
                                                     value={set.weight}
                                                     onChange={(e) => updateSet(exercise.id, idx, "weight", e.target.value)}
-                                                    className="bg-neutral-950 border-neutral-800 text-center h-9 focus-visible:ring-emerald-500/50"
+                                                    className="bg-background border-border text-center h-9 focus-visible:ring-emerald-500/50"
                                                 />
                                             </div>
                                             <div className="col-span-4">
@@ -221,14 +221,14 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
                                                     placeholder="0"
                                                     value={set.reps}
                                                     onChange={(e) => updateSet(exercise.id, idx, "reps", e.target.value)}
-                                                    className="bg-neutral-950 border-neutral-800 text-center h-9 focus-visible:ring-emerald-500/50"
+                                                    className="bg-background border-border text-center h-9 focus-visible:ring-emerald-500/50"
                                                 />
                                             </div>
                                             <div className="col-span-1 flex justify-center">
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
-                                                    className="h-8 w-8 text-neutral-600 hover:text-red-400"
+                                                    className="h-8 w-8 text-muted-foreground hover:text-red-400"
                                                     onClick={() => removeSet(exercise.id, idx)}
                                                 >
                                                     <Trash2 className="w-3 h-3" />
@@ -241,7 +241,7 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
                                     variant="outline"
                                     size="sm"
                                     onClick={() => addSet(exercise.id)}
-                                    className="w-full border-neutral-800 hover:bg-neutral-800 text-neutral-400 hover:text-emerald-500 transition-colors"
+                                    className="w-full border-border hover:bg-secondary text-muted-foreground hover:text-emerald-500 transition-colors"
                                 >
                                     <Plus className="w-4 h-4 mr-2" />
                                     Add Set
@@ -258,7 +258,7 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
                             Add Exercise
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="h-[90vh] max-w-xl p-0 gap-0 bg-neutral-950 border-neutral-800 text-neutral-100 flex flex-col">
+                    <DialogContent className="h-[90vh] max-w-xl p-0 gap-0 bg-background border-border text-foreground flex flex-col">
                         <DialogTitle className="sr-only">Select Exercise</DialogTitle>
                         <DialogDescription className="sr-only">Choose an exercise from the library to add to your workout.</DialogDescription>
                         <ExerciseLibrary onSelect={addExercise} />
