@@ -6,7 +6,8 @@ import { WorkoutLogger } from "./WorkoutLogger";
 import { WorkoutHistory } from "./WorkoutHistory";
 import { Profile } from "./Profile";
 import { ProgressAnalytics } from "./ProgressAnalytics";
-import { Home, Dumbbell, List, User, LineChart } from "lucide-react";
+import { BodyMeasurements } from "./measurements/BodyMeasurements";
+import { Home, Dumbbell, List, User, LineChart, Scale } from "lucide-react";
 
 export function Layout() {
     const [activeTab, setActiveTab] = useState("dashboard");
@@ -28,6 +29,8 @@ export function Layout() {
                 return <Profile />;
             case "analytics":
                 return <ProgressAnalytics />;
+            case "measurements":
+                return <BodyMeasurements />;
             default:
                 return <Dashboard />;
         }
@@ -77,6 +80,15 @@ export function Layout() {
                     >
                         <LineChart className="w-6 h-6" />
                         <span className="text-[10px] font-medium">Analytics</span>
+                    </button>
+
+                    <button
+                        onClick={() => setActiveTab("measurements")}
+                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "measurements" ? "text-emerald-500" : "text-neutral-500 hover:text-neutral-300"
+                            }`}
+                    >
+                        <Scale className="w-6 h-6" />
+                        <span className="text-[10px] font-medium">Measure</span>
                     </button>
 
                     <button
