@@ -5,12 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChefHat, Trash2, Save, Star, Clock } from "lucide-react";
+import { ChefHat, Trash2, Save, Star, Clock, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { FoodSearch } from "./FoodSearch";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 
 type FoodItem = Database["public"]["Tables"]["food_items"]["Row"];
 
@@ -31,6 +33,111 @@ interface MealLogWithItems {
 }
 
 const MEAL_TYPES = ["Breakfast", "Lunch", "Dinner", "Snack"];
+
+function AIImportDialog({ onImport }: { onImport: (items: any[]) => void }) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [jsonInput, setJsonInput] = useState("");
+    const [importing, setImporting] = useState(false);
+
+    const SYSTEM_PROMPT = `You are a nutrition assistant. Analyze the user's food request (image or text) and output a JSON array of ingredients.
+Schema:
+[
+  {
+    "name": "Food Name",
+    "calories": 100, // integer calories per unit
+    "protein": 10, // numeric grams
+    "carbs": 20, // numeric grams
+    "fats": 5, // numeric grams
+    "unit": "slice/piece/cup/100g",
+    "quantity": 1 // numeric quantity consumed
+  }
+]
+Output ONLY raw JSON. No markdown formatting.`;
+
+    const handleImport = async () => {
+        if (!jsonInput.trim()) return;
+
+        setImporting(true);
+        try {
+            // Clean input (remove markdown code blocks if present)
+            const cleanJson = jsonInput.replace(/```json/g, "").replace(/```/g, "").trim();
+            const parsedItems = JSON.parse(cleanJson);
+
+            if (!Array.isArray(parsedItems)) throw new Error("Input must be an array");
+
+            await onImport(parsedItems);
+            setIsOpen(false);
+            setJsonInput("");
+            toast.success("Items imported!");
+        } catch (e) {
+            console.error(e);
+            toast.error("Invalid JSON. Please check the format.");
+        } finally {
+            setImporting(false);
+        }
+    };
+
+    return (
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger asChild>
+                <Button variant="outline" className="gap-2 border-emerald-500/50 text-emerald-500 hover:bg-emerald-950/30 hover:text-emerald-400">
+                    <Sparkles className="w-4 h-4" />
+                    Smart Import
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[600px] bg-neutral-900 border-neutral-800 text-white">
+                <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                        <Sparkles className="w-5 h-5 text-emerald-500" />
+                        Import from AI (Gemini/ChatGPT)
+                    </DialogTitle>
+                    <DialogDescription className="text-neutral-400">
+                        Use an LLM to analyze your meal photo or description, then paste the result here.
+                    </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-4 py-2">
+                    <div className="space-y-2">
+                        <Label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">Step 1: Copy System Prompt</Label>
+                        <div className="relative">
+                            <pre className="bg-neutral-950 p-3 rounded-md text-xs text-neutral-300 overflow-x-auto whitespace-pre-wrap border border-neutral-800">
+                                {SYSTEM_PROMPT}
+                            </pre>
+                            <Button
+                                size="sm"
+                                variant="secondary"
+                                className="absolute top-2 right-2 h-6 text-xs"
+                                onClick={() => {
+                                    navigator.clipboard.writeText(SYSTEM_PROMPT);
+                                    toast.success("Prompt copied!");
+                                }}
+                            >
+                                Copy
+                            </Button>
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">Step 2: Paste AI Response</Label>
+                        <Textarea
+                            placeholder="Paste JSON here..."
+                            className="bg-neutral-950 border-neutral-800 text-white font-mono text-sm h-[150px]"
+                            value={jsonInput}
+                            onChange={(e) => setJsonInput(e.target.value)}
+                        />
+                    </div>
+                </div>
+
+                <DialogFooter>
+                    <Button variant="ghost" onClick={() => setIsOpen(false)} className="text-neutral-400 hover:text-white">Cancel</Button>
+                    <Button onClick={handleImport} className="bg-emerald-600 hover:bg-emerald-700 text-white" disabled={importing}>
+                        {importing ? "Importing..." : "Import Foods"}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
+}
 
 export function MealBuilder({ onLogComplete }: { onLogComplete?: () => void }) {
     const [date, setDate] = useState(format(new Date(), "yyyy-MM-dd"));
@@ -242,14 +349,51 @@ export function MealBuilder({ onLogComplete }: { onLogComplete?: () => void }) {
         }
     };
 
+    const handleAIImport = async (importedItems: any[]) => {
+        // 1. Upsert food items into database to get IDs
+        // Note: We check if they exist by name to assume duplicates? 
+        // Or simply insert new ones. For simplicity and robustness, we'll insert new "Custom" items or check exact name.
+        // Actually, let's just insert them. 'name' isn't unique in schema.
+
+        // Prepare items for insert
+        const foodsToInsert = importedItems.map(item => ({
+            name: item.name,
+            calories: item.calories,
+            protein: item.protein,
+            carbs: item.carbs,
+            fats: item.fats,
+            unit: item.unit || 'serving',
+            quality_score: 50 // Default score for AI imported
+        }));
+
+        const { data: createdFoods, error } = await supabase
+            .from('food_items')
+            .insert(foodsToInsert as any)
+            .select();
+
+        if (error || !createdFoods) {
+            console.error(error);
+            throw new Error("Failed to create food items");
+        }
+
+        // 2. Add to local state (mapped to MealItem)
+        const newMealItems: MealItem[] = createdFoods.map((food, index) => ({
+            food: food,
+            quantity: importedItems[index].quantity || 1
+        }));
+
+        setItems(prev => [...prev, ...newMealItems]);
+    };
+
     return (
         <div className="space-y-6">
             <Card className="bg-neutral-900 border-neutral-800">
-                <CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle className="text-lg flex items-center gap-2 text-white">
                         <ChefHat className="h-5 w-5 text-emerald-500" />
                         Meal Builder
                     </CardTitle>
+                    <AIImportDialog onImport={handleAIImport} />
                 </CardHeader>
                 <CardContent className="space-y-6">
 
