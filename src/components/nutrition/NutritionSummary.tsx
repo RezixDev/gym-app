@@ -77,7 +77,7 @@ export function NutritionSummary({ refreshTrigger }: { refreshTrigger?: number }
                             <Flame className="w-4 h-4 text-orange-500" /> Calories
                         </span>
                         <span className="text-foreground font-medium">
-                            {stats.calories} / <span className="text-muted-foreground">{goals.calories}</span>
+                            {Math.round(stats.calories)} / <span className="text-muted-foreground">{goals.calories}</span>
                         </span>
                     </div>
                     <Progress value={caloriePercent} className="h-2 bg-secondary" indicatorClassName="bg-orange-500" />
@@ -89,7 +89,7 @@ export function NutritionSummary({ refreshTrigger }: { refreshTrigger?: number }
                             <Beef className="w-4 h-4 text-red-500" /> Protein
                         </span>
                         <span className="text-foreground font-medium">
-                            {stats.protein}g / <span className="text-muted-foreground">{goals.protein}g</span>
+                            {Math.round(stats.protein * 10) / 10}g / <span className="text-muted-foreground">{goals.protein}g</span>
                         </span>
                     </div>
                     <Progress value={proteinPercent} className="h-2 bg-secondary" indicatorClassName="bg-red-500" />
