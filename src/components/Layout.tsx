@@ -7,7 +7,8 @@ import { WorkoutHistory } from "./WorkoutHistory";
 import { Profile } from "./Profile";
 import { ProgressAnalytics } from "./ProgressAnalytics";
 import { BodyMeasurements } from "./measurements/BodyMeasurements";
-import { Home, Dumbbell, List, User, LineChart, Scale } from "lucide-react";
+import { MealBuilder } from "./nutrition/MealBuilder";
+import { Home, Dumbbell, List, User, LineChart, Scale, ChefHat } from "lucide-react";
 
 export function Layout() {
     const [activeTab, setActiveTab] = useState("dashboard");
@@ -25,8 +26,10 @@ export function Layout() {
                 );
             case "exercises":
                 return <ExerciseLibrary />;
+            case "meal_builder":
+                return <MealBuilder />;
             case "profile":
-                return <Profile />;
+                return <Profile onNavigate={setActiveTab} />;
             case "analytics":
                 return <ProgressAnalytics />;
             case "measurements":
@@ -65,6 +68,15 @@ export function Layout() {
                     </button>
 
                     <button
+                        onClick={() => setActiveTab("meal_builder")}
+                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "meal_builder" ? "text-emerald-500" : "text-neutral-500 hover:text-neutral-300"
+                            }`}
+                    >
+                        <ChefHat className="w-6 h-6" />
+                        <span className="text-[10px] font-medium">Nutrition</span>
+                    </button>
+
+                    <button
                         onClick={() => setActiveTab("exercises")}
                         className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "exercises" ? "text-emerald-500" : "text-neutral-500 hover:text-neutral-300"
                             }`}
@@ -73,9 +85,10 @@ export function Layout() {
                         <span className="text-[10px] font-medium">Exercises</span>
                     </button>
 
+                    {/* Analytics - Desktop Only */}
                     <button
                         onClick={() => setActiveTab("analytics")}
-                        className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "analytics" ? "text-emerald-500" : "text-neutral-500 hover:text-neutral-300"
+                        className={`hidden md:flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${activeTab === "analytics" ? "text-emerald-500" : "text-neutral-500 hover:text-neutral-300"
                             }`}
                     >
                         <LineChart className="w-6 h-6" />

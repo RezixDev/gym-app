@@ -8,10 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { LogOut, Settings, Activity, User as UserIcon } from "lucide-react";
+import { LogOut, Settings, Activity, User as UserIcon, LineChart } from "lucide-react";
 import { toast } from "sonner";
 
-export function Profile() {
+interface ProfileProps {
+    onNavigate?: (tab: string) => void;
+}
+
+export function Profile({ onNavigate }: ProfileProps) {
     const { user, signOut } = useAuth();
     const [workoutCount, setWorkoutCount] = useState<number>(0);
     const [unitPreference, setUnitPreference] = useState<"kg" | "lbs">("kg");
@@ -142,6 +146,18 @@ export function Profile() {
                         </div>
                     </CardContent>
                 </Card>
+
+                {/* Mobile Navigation Links */}
+                <div className="md:hidden">
+                    <Button
+                        variant="outline"
+                        className="w-full justify-start text-neutral-300 border-neutral-800 bg-neutral-900 hover:bg-neutral-800 hover:text-white"
+                        onClick={() => onNavigate?.("analytics")}
+                    >
+                        <LineChart className="mr-2 h-4 w-4 text-emerald-500" />
+                        View Progress Analytics
+                    </Button>
+                </div>
 
                 <Card className="bg-neutral-900 border-neutral-800">
                     <CardHeader className="pb-2">
