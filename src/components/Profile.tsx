@@ -17,6 +17,8 @@ export function Profile() {
     const [unitPreference, setUnitPreference] = useState<"kg" | "lbs">("kg");
     const [weight, setWeight] = useState<string>("");
     const [height, setHeight] = useState<string>("");
+    const [calorieGoal, setCalorieGoal] = useState<string>("");
+    const [proteinGoal, setProteinGoal] = useState<string>("");
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -38,7 +40,7 @@ export function Profile() {
         const fetchProfile = async () => {
             const { data, error } = await supabase
                 .from("profiles")
-                .select("unit_preference, weight, height")
+                .select("unit_preference, weight, height, calorie_goal, protein_goal")
                 .eq("id", user.id)
                 .single();
 
@@ -46,6 +48,8 @@ export function Profile() {
                 setUnitPreference(data.unit_preference as "kg" | "lbs");
                 if (data.weight) setWeight(data.weight.toString());
                 if (data.height) setHeight(data.height.toString());
+                if (data.calorie_goal) setCalorieGoal(data.calorie_goal.toString());
+                if (data.protein_goal) setProteinGoal(data.protein_goal.toString());
             } else if (error && error.code === 'PGRST116') {
                 // Profile doesn't exist
             }
@@ -83,19 +87,21 @@ export function Profile() {
         }
     };
 
-    const handleStatChange = async (field: "weight" | "height", value: string) => {
+    const handleStatChange = async (field: "weight" | "height" | "calorie_goal" | "protein_goal", value: string) => {
         if (field === "weight") setWeight(value);
         if (field === "height") setHeight(value);
+        if (field === "calorie_goal") setCalorieGoal(value);
+        if (field === "protein_goal") setProteinGoal(value);
     };
 
-    const handleStatBlur = async (field: "weight" | "height", value: string) => {
+    const handleStatBlur = async (field: "weight" | "height" | "calorie_goal" | "protein_goal", value: string) => {
         if (!value) return;
         const numValue = parseFloat(value);
         if (isNaN(numValue)) return;
 
         const success = await handleProfileUpdate({ [field]: numValue });
         if (success) {
-            toast.success(`${field.charAt(0).toUpperCase() + field.slice(1)} updated`);
+            toast.success(`${field.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')} updated`);
         }
     };
 
@@ -184,6 +190,38 @@ export function Profile() {
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-6">
+                        <div className="space-y-4">
+                            <h3 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">Nutrition Goals</h3>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="calories" className="text-neutral-400">Daily Calories (kcal)</Label>
+                                    <Input
+                                        id="calories"
+                                        type="number"
+                                        value={calorieGoal}
+                                        onChange={(e) => handleStatChange("calorie_goal", e.target.value)}
+                                        onBlur={(e) => handleStatBlur("calorie_goal", e.target.value)}
+                                        className="bg-neutral-950 border-neutral-800 text-white"
+                                        placeholder="2000"
+                                        inputMode="numeric"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="protein" className="text-neutral-400">Daily Protein (g)</Label>
+                                    <Input
+                                        id="protein"
+                                        type="number"
+                                        value={proteinGoal}
+                                        onChange={(e) => handleStatChange("protein_goal", e.target.value)}
+                                        onBlur={(e) => handleStatBlur("protein_goal", e.target.value)}
+                                        className="bg-neutral-950 border-neutral-800 text-white"
+                                        placeholder="150"
+                                        inputMode="numeric"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
                         <div className="flex items-center justify-between space-x-2 bg-neutral-950 p-3 rounded-lg border border-neutral-800">
                             <Label htmlFor="unit-mode" className="flex flex-col space-y-1 cursor-pointer">
                                 <span className="text-white font-medium">Unit Preference</span>
