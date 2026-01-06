@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dumbbell } from "lucide-react";
 
 export function Auth() {
+    const { t } = useTranslation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState(""); // For signup
@@ -50,113 +52,113 @@ export function Auth() {
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary border border-border">
                         <Dumbbell className="h-6 w-6 text-emerald-500" />
                     </div>
-                    <h1 className="text-2xl font-bold tracking-tight text-foreground">GymTrack</h1>
-                    <p className="text-sm text-muted-foreground">Track your progress, reach your goals.</p>
                 </div>
-
-                <Tabs defaultValue="login" className="w-full">
-                    <TabsList className="grid w-full grid-cols-2 bg-muted text-muted-foreground">
-                        <TabsTrigger value="login" className="data-[state=active]:bg-background data-[state=active]:text-foreground">Login</TabsTrigger>
-                        <TabsTrigger value="signup" className="data-[state=active]:bg-background data-[state=active]:text-foreground">Sign Up</TabsTrigger>
-                    </TabsList>
-
-                    <TabsContent value="login">
-                        <Card className="border-border bg-card text-card-foreground">
-                            <CardHeader>
-                                <CardTitle>Welcome back</CardTitle>
-                                <CardDescription className="text-muted-foreground">Enter your credentials to access your account.</CardDescription>
-                            </CardHeader>
-                            <form onSubmit={handleLogin}>
-                                <CardContent className="space-y-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="email">Email</Label>
-                                        <Input
-                                            id="email"
-                                            type="email"
-                                            placeholder="m@example.com"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            required
-                                            className="bg-neutral-950 border-neutral-800 text-white placeholder:text-neutral-600 focus-visible:ring-emerald-500"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="password">Password</Label>
-                                        <Input
-                                            id="password"
-                                            type="password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            required
-                                            className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
-                                        />
-                                    </div>
-                                    {error && <p className="text-sm text-red-500">{error}</p>}
-                                </CardContent>
-                                <CardFooter>
-                                    <Button type="submit" disabled={loading} className="w-full bg-emerald-500 text-black hover:bg-emerald-400">
-                                        {loading ? "Signing in..." : "Sign In"}
-                                    </Button>
-                                </CardFooter>
-                            </form>
-                        </Card>
-                    </TabsContent>
-
-                    <TabsContent value="signup">
-                        <Card className="border-border bg-card text-card-foreground">
-                            <CardHeader>
-                                <CardTitle>Create an account</CardTitle>
-                                <CardDescription className="text-muted-foreground">Enter your details to create a new account.</CardDescription>
-                            </CardHeader>
-                            <form onSubmit={handleSignUp}>
-                                <CardContent className="space-y-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="signup-email">Email</Label>
-                                        <Input
-                                            id="signup-email"
-                                            type="email"
-                                            placeholder="m@example.com"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            required
-                                            className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="signup-username">Username</Label>
-                                        <Input
-                                            id="signup-username"
-                                            type="text"
-                                            placeholder="gymrat123"
-                                            value={username}
-                                            onChange={(e) => setUsername(e.target.value)}
-                                            required
-                                            className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="signup-password">Password</Label>
-                                        <Input
-                                            id="signup-password"
-                                            type="password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            required
-                                            className="bg-neutral-950 border-neutral-800 text-white placeholder:text-neutral-600 focus-visible:ring-emerald-500"
-                                        />
-                                    </div>
-                                    {error && <p className="text-sm text-red-500">{error}</p>}
-                                </CardContent>
-                                <CardFooter>
-                                    <Button type="submit" disabled={loading} className="w-full bg-emerald-500 text-black hover:bg-emerald-400">
-                                        {loading ? "Creating account..." : "Sign Up"}
-                                    </Button>
-                                </CardFooter>
-                            </form>
-                        </Card>
-                    </TabsContent>
-                </Tabs>
+                <h1 className="text-2xl font-bold tracking-tight text-foreground">{t('auth.gymTrack')}</h1>
+                <p className="text-sm text-muted-foreground">{t('auth.slogan')}</p>
             </div>
+
+            <Tabs defaultValue="login" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 bg-muted text-muted-foreground">
+                    <TabsTrigger value="login" className="data-[state=active]:bg-background data-[state=active]:text-foreground">{t('auth.login')}</TabsTrigger>
+                    <TabsTrigger value="signup" className="data-[state=active]:bg-background data-[state=active]:text-foreground">{t('auth.signUp')}</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="login">
+                    <Card className="border-border bg-card text-card-foreground">
+                        <CardHeader>
+                            <CardTitle>{t('auth.welcomeBack')}</CardTitle>
+                            <CardDescription className="text-muted-foreground">{t('auth.loginDesc')}</CardDescription>
+                        </CardHeader>
+                        <form onSubmit={handleLogin}>
+                            <CardContent className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">{t('auth.email')}</Label>
+                                    <Input
+                                        id="email"
+                                        type="email"
+                                        placeholder="m@example.com"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                        className="bg-neutral-950 border-neutral-800 text-white placeholder:text-neutral-600 focus-visible:ring-emerald-500"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="password">{t('auth.password')}</Label>
+                                    <Input
+                                        id="password"
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                        className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
+                                    />
+                                </div>
+                                {error && <p className="text-sm text-red-500">{error}</p>}
+                            </CardContent>
+                            <CardFooter>
+                                <Button type="submit" disabled={loading} className="w-full bg-emerald-500 text-black hover:bg-emerald-400">
+                                    {loading ? t('auth.signingIn') : t('auth.signIn')}
+                                </Button>
+                            </CardFooter>
+                        </form>
+                    </Card>
+                </TabsContent>
+
+                <TabsContent value="signup">
+                    <Card className="border-border bg-card text-card-foreground">
+                        <CardHeader>
+                            <CardTitle>{t('auth.createAccount')}</CardTitle>
+                            <CardDescription className="text-muted-foreground">{t('auth.signupDesc')}</CardDescription>
+                        </CardHeader>
+                        <form onSubmit={handleSignUp}>
+                            <CardContent className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="signup-email">{t('auth.email')}</Label>
+                                    <Input
+                                        id="signup-email"
+                                        type="email"
+                                        placeholder="m@example.com"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                        className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="signup-username">{t('auth.username')}</Label>
+                                    <Input
+                                        id="signup-username"
+                                        type="text"
+                                        placeholder="gymrat123"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        required
+                                        className="bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="signup-password">{t('auth.password')}</Label>
+                                    <Input
+                                        id="signup-password"
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                        className="bg-neutral-950 border-neutral-800 text-white placeholder:text-neutral-600 focus-visible:ring-emerald-500"
+                                    />
+                                </div>
+                                {error && <p className="text-sm text-red-500">{error}</p>}
+                            </CardContent>
+                            <CardFooter>
+                                <Button type="submit" disabled={loading} className="w-full bg-emerald-500 text-black hover:bg-emerald-400">
+                                    {loading ? t('auth.creatingAccount') : t('auth.signUp')}
+                                </Button>
+                            </CardFooter>
+                        </form>
+                    </Card>
+                </TabsContent>
+            </Tabs>
         </div>
     );
 }

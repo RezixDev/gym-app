@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/lib/supabase";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Flame, Beef, Loader2 } from "lucide-react";
 
 export function NutritionSummary({ refreshTrigger }: { refreshTrigger?: number }) {
+    const { t } = useTranslation();
     const [stats, setStats] = useState({ calories: 0, protein: 0 });
     const [goals, setGoals] = useState({ calories: 2000, protein: 150 });
     const [loading, setLoading] = useState(true);
@@ -68,13 +70,13 @@ export function NutritionSummary({ refreshTrigger }: { refreshTrigger?: number }
     return (
         <Card className="bg-card border-border">
             <CardHeader className="pb-2">
-                <CardTitle className="text-lg font-semibold text-card-foreground">Daily Nutrition</CardTitle>
+                <CardTitle className="text-lg font-semibold text-card-foreground">{t('nutrition.dailyNutrition')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
                 <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground flex items-center gap-1">
-                            <Flame className="w-4 h-4 text-orange-500" /> Calories
+                            <Flame className="w-4 h-4 text-orange-500" /> {t('nutrition.calories')}
                         </span>
                         <span className="text-foreground font-medium">
                             {Math.round(stats.calories)} / <span className="text-muted-foreground">{goals.calories}</span>
@@ -86,7 +88,7 @@ export function NutritionSummary({ refreshTrigger }: { refreshTrigger?: number }
                 <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground flex items-center gap-1">
-                            <Beef className="w-4 h-4 text-red-500" /> Protein
+                            <Beef className="w-4 h-4 text-red-500" /> {t('nutrition.protein')}
                         </span>
                         <span className="text-foreground font-medium">
                             {Math.round(stats.protein * 10) / 10}g / <span className="text-muted-foreground">{goals.protein}g</span>

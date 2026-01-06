@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Search, Dumbbell } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { Card, CardContent } from "@/components/ui/card";
@@ -26,15 +27,15 @@ function getCategoryVariant(equipmentType: string | null): "strength" | "cardio"
     return "strength";
 }
 
-function getCategoryLabel(equipmentType: string | null): string {
+function getCategoryLabel(equipmentType: string | null, t: any): string {
     const variant = getCategoryVariant(equipmentType);
     switch (variant) {
         case "cardio":
-            return "Cardio";
+            return t('exercises.categories.cardio');
         case "flexibility":
-            return "Flexibility";
+            return t('exercises.categories.flexibility');
         default:
-            return "Strength";
+            return t('exercises.categories.strength');
     }
 }
 
@@ -43,6 +44,7 @@ interface ExerciseLibraryProps {
 }
 
 export function ExerciseLibrary({ onSelect }: ExerciseLibraryProps) {
+    const { t } = useTranslation();
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = useState(true);
@@ -67,7 +69,7 @@ export function ExerciseLibrary({ onSelect }: ExerciseLibraryProps) {
                 setExercises(data || []);
             } catch (err) {
                 console.error("Error fetching exercises:", err);
-                setError("Failed to load exercises. Please try again.");
+                setError(t('exercises.error'));
             } finally {
                 setLoading(false);
             }
@@ -95,14 +97,14 @@ export function ExerciseLibrary({ onSelect }: ExerciseLibraryProps) {
         <div className="flex flex-col h-[calc(100vh-8rem)]">
             {/* Header */}
             <div className="p-4 space-y-4">
-                <h1 className="text-3xl font-bold text-foreground">Exercise Library</h1>
+                <h1 className="text-3xl font-bold text-foreground">{t('exercises.title')}</h1>
 
                 {/* Search Bar */}
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                         type="text"
-                        placeholder="Search exercises..."
+                        placeholder={t('exercises.searchPlaceholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="pl-10 bg-background border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-emerald-500/50 focus-visible:border-emerald-500"
@@ -114,7 +116,7 @@ export function ExerciseLibrary({ onSelect }: ExerciseLibraryProps) {
             <ScrollArea className="flex-1 px-4">
                 {loading ? (
                     <div className="flex items-center justify-center py-12">
-                        <div className="animate-pulse text-muted-foreground">Loading exercises...</div>
+                        <div className="animate-pulse text-muted-foreground">{t('exercises.loading')}</div>
                     </div>
                 ) : error ? (
                     <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -123,7 +125,7 @@ export function ExerciseLibrary({ onSelect }: ExerciseLibraryProps) {
                             onClick={() => window.location.reload()}
                             className="text-emerald-500 hover:text-emerald-400 underline"
                         >
-                            Retry
+                            {t('exercises.retry')}
                         </button>
                     </div>
                 ) : filteredExercises.length === 0 ? (
@@ -131,8 +133,8 @@ export function ExerciseLibrary({ onSelect }: ExerciseLibraryProps) {
                         <Dumbbell className="h-12 w-12 text-muted-foreground mb-4" />
                         <p className="text-muted-foreground">
                             {searchQuery
-                                ? "No exercises found matching your search."
-                                : "No exercises available yet."}
+                                ? t('exercises.noResults')
+                                : t('exercises.empty')}
                         </p>
                     </div>
                 ) : (
@@ -149,11 +151,11 @@ export function ExerciseLibrary({ onSelect }: ExerciseLibraryProps) {
                                             {exercise.name}
                                         </h3>
                                         <p className="text-sm text-muted-foreground mt-0.5">
-                                            {exercise.muscle_group || "General"}
+                                            {exercise.muscle_group || t('exercises.general')}
                                         </p>
                                     </div>
                                     <Badge variant={getCategoryVariant(exercise.equipment_type)}>
-                                        {getCategoryLabel(exercise.equipment_type)}
+                                        {getCategoryLabel(exercise.equipment_type, t)}
                                     </Badge>
                                 </CardContent>
                             </Card>
@@ -165,7 +167,7 @@ export function ExerciseLibrary({ onSelect }: ExerciseLibraryProps) {
             {/* Results count */}
             {!loading && !error && exercises.length > 0 && (
                 <div className="px-4 py-2 text-center text-xs text-muted-foreground border-t border-border">
-                    Showing {filteredExercises.length} of {exercises.length} exercises
+                    {t('exercises.showingCount', { count: filteredExercises.length, total: exercises.length })}
                 </div>
             )}
         </div>

@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { MeasurementEntryForm } from "./MeasurementEntryForm";
 import { MeasurementHistory } from "./MeasurementHistory";
 import { Scale } from "lucide-react";
 
 export function BodyMeasurements() {
+    const { t } = useTranslation();
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
     const handleEntryAdded = () => {
@@ -17,8 +19,8 @@ export function BodyMeasurements() {
                     <Scale className="w-6 h-6 text-emerald-500" />
                 </div>
                 <div>
-                    <h1 className="text-2xl font-bold text-foreground">Body Metrics</h1>
-                    <p className="text-muted-foreground text-sm">Track your growth</p>
+                    <h1 className="text-2xl font-bold text-foreground">{t('measurements.title')}</h1>
+                    <p className="text-muted-foreground text-sm">{t('measurements.subtitle')}</p>
                 </div>
             </header>
 

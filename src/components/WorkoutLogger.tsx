@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Plus, Trash2, Dumbbell, Save } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { ExerciseLibrary } from "./ExerciseLibrary";
@@ -22,6 +23,7 @@ interface WorkoutExercise {
 }
 
 export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
+    const { t } = useTranslation();
     const { session } = useAuth();
     const [exercises, setExercises] = useState<WorkoutExercise[]>([]);
     const [isLibraryOpen, setIsLibraryOpen] = useState(false);
@@ -36,7 +38,7 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
         };
         setExercises([...exercises, newExercise]);
         setIsLibraryOpen(false);
-        toast.success(`Added ${exercise.name}`);
+        toast.success(`${t('workouts.added')} ${exercise.name}`);
     };
 
     const removeExercise = (id: string) => {
@@ -85,12 +87,12 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
 
     const handleFinish = async () => {
         if (exercises.length === 0) {
-            toast.error("Add at least one exercise before finishing.");
+            toast.error(t('workouts.addExerciseRequired'));
             return;
         }
 
         if (!session?.user.id) {
-            toast.error("You must be logged in to save workouts.");
+            toast.error(t('workouts.loginRequired'));
             return;
         }
 
@@ -129,7 +131,7 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
 
             if (setsToInsert.length === 0) {
                 // Warning: Workout with empty sets?
-                toast.warning("Workout saved, but no valid sets were recorded.");
+                toast.warning(t('workouts.noValidSets'));
             } else {
                 const { error: setsError } = await supabase
                     .from("workout_sets")
@@ -138,13 +140,13 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
                 if (setsError) throw setsError;
             }
 
-            toast.success("Workout saved successfully!");
+            toast.success(t('workouts.savedSuccess'));
             setExercises([]); // Clear state
             if (onFinish) onFinish();
 
         } catch (error) {
             console.error("Error saving workout:", error);
-            toast.error("Failed to save workout. Please try again.");
+            toast.error(t('workouts.saveError'));
         } finally {
             setIsSubmitting(false);
         }
@@ -154,13 +156,13 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
         <div className="flex flex-col h-[calc(100vh-8rem)]">
             <div className="p-4 space-y-4 border-b border-border">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-bold text-foreground">Active Workout</h1>
+                    <h1 className="text-2xl font-bold text-foreground">{t('workouts.activeWorkout')}</h1>
                     <Button
                         onClick={handleFinish}
                         disabled={isSubmitting || exercises.length === 0}
                         className="bg-emerald-600 hover:bg-emerald-700 text-white"
                     >
-                        {isSubmitting ? "Saving..." : "Finish"}
+                        {isSubmitting ? t('workouts.saving') : t('workouts.finish')}
                         <Save className="w-4 h-4 ml-2" />
                     </Button>
                 </div>
@@ -170,8 +172,8 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
                 {exercises.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-64 text-muted-foreground border-2 border-dashed border-border rounded-lg">
                         <Dumbbell className="w-12 h-12 mb-4 opacity-50" />
-                        <p>No exercises added yet.</p>
-                        <p className="text-sm">Start by adding an exercise.</p>
+                        <p>{t('workouts.noExercises')}</p>
+                        <p className="text-sm">{t('workouts.startAdding')}</p>
                     </div>
                 ) : (
                     exercises.map((exercise) => (
@@ -192,9 +194,9 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
                             <CardContent className="space-y-4">
                                 <div className="space-y-2">
                                     <div className="grid grid-cols-10 gap-2 text-xs text-muted-foreground uppercase font-medium text-center">
-                                        <div className="col-span-1">Set</div>
-                                        <div className="col-span-4">kg</div>
-                                        <div className="col-span-4">Reps</div>
+                                        <div className="col-span-1">{t('workouts.set')}</div>
+                                        <div className="col-span-4">{t('workouts.weight')}</div>
+                                        <div className="col-span-4">{t('workouts.reps')}</div>
                                         <div className="col-span-1"></div>
                                     </div>
                                     {exercise.sets.map((set, idx) => (
@@ -244,7 +246,7 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
                                     className="w-full border-border hover:bg-secondary text-muted-foreground hover:text-emerald-500 transition-colors"
                                 >
                                     <Plus className="w-4 h-4 mr-2" />
-                                    Add Set
+                                    {t('workouts.addSet')}
                                 </Button>
                             </CardContent>
                         </Card>
@@ -255,12 +257,12 @@ export function WorkoutLogger({ onFinish }: { onFinish?: () => void }) {
                     <DialogTrigger asChild>
                         <Button className="w-full h-12 text-lg font-medium bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-900/20">
                             <Plus className="w-5 h-5 mr-2" />
-                            Add Exercise
+                            {t('workouts.addExercise')}
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="h-[90vh] max-w-xl p-0 gap-0 bg-background border-border text-foreground flex flex-col">
-                        <DialogTitle className="sr-only">Select Exercise</DialogTitle>
-                        <DialogDescription className="sr-only">Choose an exercise from the library to add to your workout.</DialogDescription>
+                        <DialogTitle className="sr-only">{t('workouts.selectExercise')}</DialogTitle>
+                        <DialogDescription className="sr-only">{t('workouts.chooseExercise')}</DialogDescription>
                         <ExerciseLibrary onSelect={addExercise} />
                     </DialogContent>
                 </Dialog>

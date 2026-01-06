@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/lib/supabase";
 import type { Database } from "@/lib/database.types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,6 +36,7 @@ interface MealLogWithItems {
 const MEAL_TYPES = ["Breakfast", "Lunch", "Dinner", "Snack"];
 
 function AIImportDialog({ onImport }: { onImport: (items: any[]) => void }) {
+    const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const [jsonInput, setJsonInput] = useState("");
     const [importing, setImporting] = useState(false);
@@ -68,10 +70,10 @@ Output ONLY raw JSON. No markdown formatting.`;
             await onImport(parsedItems);
             setIsOpen(false);
             setJsonInput("");
-            toast.success("Items imported!");
+            toast.success(t('nutrition.imported'));
         } catch (e) {
             console.error(e);
-            toast.error("Invalid JSON. Please check the format.");
+            toast.error(t('nutrition.invalidJson'));
         } finally {
             setImporting(false);
         }
@@ -82,23 +84,23 @@ Output ONLY raw JSON. No markdown formatting.`;
             <DialogTrigger asChild>
                 <Button variant="outline" className="gap-2 border-emerald-500/50 text-emerald-500 hover:bg-emerald-950/30 hover:text-emerald-400">
                     <Sparkles className="w-4 h-4" />
-                    Smart Import
+                    {t('nutrition.smartImport')}
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px] bg-neutral-900 border-neutral-800 text-white">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <Sparkles className="w-5 h-5 text-emerald-500" />
-                        Import from AI (Gemini/ChatGPT)
+                        {t('nutrition.importTitle')}
                     </DialogTitle>
                     <DialogDescription className="text-neutral-400">
-                        Use an LLM to analyze your meal photo or description, then paste the result here.
+                        {t('nutrition.importDesc')}
                     </DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-4 py-2">
                     <div className="space-y-2">
-                        <Label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">Step 1: Copy System Prompt</Label>
+                        <Label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('nutrition.step1')}</Label>
                         <div className="relative">
                             <pre className="bg-neutral-950 p-3 rounded-md text-xs text-neutral-300 overflow-x-auto whitespace-pre-wrap border border-neutral-800">
                                 {SYSTEM_PROMPT}
@@ -109,18 +111,18 @@ Output ONLY raw JSON. No markdown formatting.`;
                                 className="absolute top-2 right-2 h-6 text-xs"
                                 onClick={() => {
                                     navigator.clipboard.writeText(SYSTEM_PROMPT);
-                                    toast.success("Prompt copied!");
+                                    toast.success(t('nutrition.copied'));
                                 }}
                             >
-                                Copy
+                                {t('nutrition.copy')}
                             </Button>
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <Label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">Step 2: Paste AI Response</Label>
+                        <Label className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">{t('nutrition.step2')}</Label>
                         <Textarea
-                            placeholder="Paste JSON here..."
+                            placeholder={t('nutrition.pasteJson')}
                             className="bg-neutral-950 border-neutral-800 text-white font-mono text-sm h-[150px]"
                             value={jsonInput}
                             onChange={(e) => setJsonInput(e.target.value)}
@@ -129,9 +131,9 @@ Output ONLY raw JSON. No markdown formatting.`;
                 </div>
 
                 <DialogFooter>
-                    <Button variant="ghost" onClick={() => setIsOpen(false)} className="text-neutral-400 hover:text-white">Cancel</Button>
+                    <Button variant="ghost" onClick={() => setIsOpen(false)} className="text-neutral-400 hover:text-white">{t('nutrition.cancel')}</Button>
                     <Button onClick={handleImport} className="bg-emerald-600 hover:bg-emerald-700 text-white" disabled={importing}>
-                        {importing ? "Importing..." : "Import Foods"}
+                        {importing ? t('nutrition.importing') : t('nutrition.import')}
                     </Button>
                 </DialogFooter>
             </DialogContent>
@@ -140,6 +142,7 @@ Output ONLY raw JSON. No markdown formatting.`;
 }
 
 export function MealBuilder({ onLogComplete }: { onLogComplete?: () => void }) {
+    const { t } = useTranslation();
     const [date, setDate] = useState(format(new Date(), "yyyy-MM-dd"));
     const [mealType, setMealType] = useState("Breakfast");
     const [items, setItems] = useState<MealItem[]>([]);
@@ -202,14 +205,14 @@ export function MealBuilder({ onLogComplete }: { onLogComplete?: () => void }) {
 
     const handleSaveMeal = async () => {
         if (items.length === 0) {
-            toast.error("Add at least one food item");
+            toast.error(t('nutrition.addFoodRequired'));
             return;
         }
 
         setLoading(true);
         try {
             const { data: { user } } = await supabase.auth.getUser();
-            if (!user) throw new Error("Not authenticated");
+            if (!user) throw new Error(t('nutrition.authRequired'));
 
             // 1. Create Meal Log
             const { data: mealLog, error: logError } = await supabase
@@ -223,7 +226,7 @@ export function MealBuilder({ onLogComplete }: { onLogComplete?: () => void }) {
                 .single();
 
             if (logError) throw logError;
-            if (!mealLog) throw new Error("Failed to create meal log");
+            if (!mealLog) throw new Error(t('nutrition.createError'));
 
             // 2. Create Meal Items
             const mealItemsData = items.map(item => ({
@@ -270,21 +273,21 @@ export function MealBuilder({ onLogComplete }: { onLogComplete?: () => void }) {
 
             if (dailyError) throw dailyError;
 
-            toast.success("Meal saved!");
+            toast.success(t('nutrition.mealSaved'));
             setItems([]);
             onLogComplete?.();
             fetchHistory(); // Refresh history
 
         } catch (error: any) {
             console.error(error);
-            toast.error(error.message || "Failed to save meal");
+            toast.error(error.message || t('nutrition.saveError'));
         } finally {
             setLoading(false);
         }
     };
 
     const handleDeleteLog = async (logId: string, logItems: any[]) => {
-        if (!confirm("Are you sure you want to delete this meal?")) return;
+        if (!confirm(t('nutrition.deleteConfirm'))) return;
 
         setLoadingHistory(true);
         try {
@@ -391,7 +394,7 @@ export function MealBuilder({ onLogComplete }: { onLogComplete?: () => void }) {
                 <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle className="text-lg flex items-center gap-2 text-white">
                         <ChefHat className="h-5 w-5 text-emerald-500" />
-                        Meal Builder
+                        {t('nutrition.title')}
                     </CardTitle>
                     <AIImportDialog onImport={handleAIImport} />
                 </CardHeader>
@@ -400,7 +403,7 @@ export function MealBuilder({ onLogComplete }: { onLogComplete?: () => void }) {
                     {/* Configuration: Date & Type */}
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label className="text-neutral-400">Date</Label>
+                            <Label className="text-neutral-400">{t('nutrition.date')}</Label>
                             <input
                                 type="date"
                                 value={date}
@@ -409,7 +412,7 @@ export function MealBuilder({ onLogComplete }: { onLogComplete?: () => void }) {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label className="text-neutral-400">Meal Type</Label>
+                            <Label className="text-neutral-400">{t('nutrition.mealType')}</Label>
                             <Select value={mealType} onValueChange={setMealType}>
                                 <SelectTrigger className="bg-neutral-950 border-neutral-800 text-white">
                                     <SelectValue />
@@ -425,16 +428,16 @@ export function MealBuilder({ onLogComplete }: { onLogComplete?: () => void }) {
 
                     {/* Search */}
                     <div className="space-y-2">
-                        <Label className="text-neutral-400">Add Item</Label>
+                        <Label className="text-neutral-400">{t('nutrition.addItem')}</Label>
                         <FoodSearch onSelect={handleAddItem} />
                     </div>
 
                     {/* Items List */}
                     <div className="space-y-3">
-                        <Label className="text-neutral-400 text-xs uppercase tracking-wider">Current Plate</Label>
+                        <Label className="text-neutral-400 text-xs uppercase tracking-wider">{t('nutrition.currentPlate')}</Label>
                         {items.length === 0 ? (
                             <div className="text-sm text-neutral-500 italic py-4 text-center border border-dashed border-neutral-800 rounded">
-                                No items added yet.
+                                {t('nutrition.noItems')}
                             </div>
                         ) : (
                             <div className="space-y-2">
@@ -477,11 +480,11 @@ export function MealBuilder({ onLogComplete }: { onLogComplete?: () => void }) {
                     <div className="pt-4 border-t border-neutral-800 space-y-4">
                         <div className="flex justify-between items-end">
                             <div className="space-y-1">
-                                <div className="text-xs text-neutral-400">Total Calories</div>
+                                <div className="text-xs text-neutral-400">{t('nutrition.totalCalories')}</div>
                                 <div className="text-2xl font-bold text-white">{Math.round(totalCalories)}</div>
                             </div>
                             <div className="space-y-1 text-right">
-                                <div className="text-xs text-neutral-400">Meal Quality</div>
+                                <div className="text-xs text-neutral-400">{t('nutrition.mealQuality')}</div>
                                 <Badge variant="outline" className={`
                                     ${totalQualityScore >= 90 ? 'border-emerald-500 text-emerald-500' :
                                         totalQualityScore >= 70 ? 'border-yellow-500 text-yellow-500' : 'border-red-500 text-red-500'}
@@ -496,9 +499,9 @@ export function MealBuilder({ onLogComplete }: { onLogComplete?: () => void }) {
                             className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
                             disabled={loading || items.length === 0}
                         >
-                            {loading ? "Saving..." : (
+                            {loading ? t('nutrition.saving') : (
                                 <>
-                                    <Save className="w-4 h-4 mr-2" /> Log Meal
+                                    <Save className="w-4 h-4 mr-2" /> {t('nutrition.logMeal')}
                                 </>
                             )}
                         </Button>
@@ -512,15 +515,15 @@ export function MealBuilder({ onLogComplete }: { onLogComplete?: () => void }) {
                 <CardHeader className="pb-2">
                     <CardTitle className="text-lg flex items-center gap-2 text-white">
                         <Clock className="h-5 w-5 text-neutral-400" />
-                        Daily Log
+                        {t('nutrition.dailyLog')}
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
                     {loadingHistory ? (
-                        <div className="text-center py-4 text-neutral-500">Loading history...</div>
+                        <div className="text-center py-4 text-neutral-500">{t('nutrition.loadingHistory')}</div>
                     ) : history.length === 0 ? (
                         <div className="text-sm text-neutral-500 italic py-4 text-center">
-                            No meals logged for this date.
+                            {t('nutrition.noMeals')}
                         </div>
                     ) : (
                         <Accordion type="single" collapsible className="w-full">
@@ -536,7 +539,7 @@ export function MealBuilder({ onLogComplete }: { onLogComplete?: () => void }) {
                                                 <div className="flex flex-col text-left">
                                                     <span className="text-sm font-medium text-white">{log.meal_type}</span>
                                                     <span className="text-xs text-neutral-400">
-                                                        {log.meal_items.length} items
+                                                        {t('nutrition.items', { count: log.meal_items.length })}
                                                     </span>
                                                 </div>
                                                 <div className="flex items-center gap-4">
@@ -562,7 +565,7 @@ export function MealBuilder({ onLogComplete }: { onLogComplete?: () => void }) {
                                             <div className="space-y-2 pl-2 border-l-2 border-neutral-800">
                                                 {log.meal_items.map((item, i) => (
                                                     <div key={i} className="flex justify-between text-sm">
-                                                        <span>{item.quantity} x {item.food_items?.name || "Unknown Item"}</span>
+                                                        <span>{item.quantity} x {item.food_items?.name || t('nutrition.unknownItem')}</span>
                                                         <span className="text-neutral-500">{Math.round((item.food_items?.calories || 0) * item.quantity)} kcal</span>
                                                     </div>
                                                 ))}

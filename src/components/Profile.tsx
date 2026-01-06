@@ -55,11 +55,12 @@ export function Profile({ onNavigate }: ProfileProps) {
                 .single();
 
             if (data) {
-                setUnitPreference(data.unit_preference as "kg" | "lbs");
-                if (data.weight) setWeight(data.weight.toString());
-                if (data.height) setHeight(data.height.toString());
-                if (data.calorie_goal) setCalorieGoal(data.calorie_goal.toString());
-                if (data.protein_goal) setProteinGoal(data.protein_goal.toString());
+                const profile = data as any;
+                setUnitPreference(profile.unit_preference as "kg" | "lbs");
+                if (profile.weight) setWeight(profile.weight.toString());
+                if (profile.height) setHeight(profile.height.toString());
+                if (profile.calorie_goal) setCalorieGoal(profile.calorie_goal.toString());
+                if (profile.protein_goal) setProteinGoal(profile.protein_goal.toString());
             } else if (error && error.code === 'PGRST116') {
                 // Profile doesn't exist
             }
@@ -142,7 +143,7 @@ export function Profile({ onNavigate }: ProfileProps) {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-lg flex items-center gap-2 text-foreground">
                             <Activity className="h-5 w-5 text-emerald-500" />
-                            Statistics
+                            {t('profile.statistics')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -169,7 +170,7 @@ export function Profile({ onNavigate }: ProfileProps) {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-lg flex items-center gap-2 text-foreground">
                             <UserIcon className="h-5 w-5 text-emerald-500" />
-                            Body Stats
+                            {t('profile.bodyStats')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">

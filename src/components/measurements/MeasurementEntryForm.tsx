@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "../../lib/supabase";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ interface MeasurementEntryFormProps {
 }
 
 export function MeasurementEntryForm({ onEntryAdded }: MeasurementEntryFormProps) {
+    const { t } = useTranslation();
     // Key is body part name, value is the input string
     const [values, setValues] = useState<Record<string, string>>({});
     const [date, setDate] = useState(format(new Date(), "yyyy-MM-dd"));
@@ -47,7 +49,10 @@ export function MeasurementEntryForm({ onEntryAdded }: MeasurementEntryFormProps
         const entriesToSave = Object.entries(values).filter(([_, val]) => val && val.trim() !== "");
 
         if (entriesToSave.length === 0) {
-            setError("Please enter at least one measurement");
+            if (entriesToSave.length === 0) {
+                setError(t('measurements.enterOne'));
+                return;
+            }
             return;
         }
 
@@ -58,7 +63,7 @@ export function MeasurementEntryForm({ onEntryAdded }: MeasurementEntryFormProps
         try {
             const { data: { user } } = await supabase.auth.getUser();
 
-            if (!user) throw new Error("No user logged in");
+            if (!user) throw new Error(t('measurements.noUser'));
 
             // Prepare batch insert
             const rows = entriesToSave.map(([part, val]) => ({
@@ -84,7 +89,7 @@ export function MeasurementEntryForm({ onEntryAdded }: MeasurementEntryFormProps
             onEntryAdded();
         } catch (err: any) {
             console.error("Error logging measurement:", err);
-            setError(err.message || "Failed to save measurement");
+            setError(err.message || t('measurements.saveError'));
         } finally {
             setLoading(false);
         }
@@ -146,11 +151,11 @@ export function MeasurementEntryForm({ onEntryAdded }: MeasurementEntryFormProps
                         className="w-full bg-emerald-600 hover:bg-emerald-700 text-white transition-all sticky bottom-4 shadow-lg shadow-neutral-950/50"
                         disabled={loading}
                     >
-                        {loading ? "Saving..." : success ? (
+                        {loading ? t('measurements.saving') : success ? (
                             <span className="flex items-center gap-2">
-                                <Check className="w-4 h-4" /> Saved
+                                <Check className="w-4 h-4" /> {t('measurements.saved')}
                             </span>
-                        ) : "Save Entry"}
+                        ) : t('measurements.saveEntry')}
                     </Button>
                 </form>
             </CardContent>

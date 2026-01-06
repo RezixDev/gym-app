@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Plus, Calendar, Dumbbell } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,7 @@ interface Workout {
 }
 
 export function WorkoutHistory({ onStartWorkout }: { onStartWorkout: () => void }) {
+    const { t } = useTranslation();
     const [workouts, setWorkouts] = useState<Workout[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -90,13 +92,13 @@ export function WorkoutHistory({ onStartWorkout }: { onStartWorkout: () => void 
         <div className="flex flex-col h-[calc(100vh-8rem)]">
             <div className="p-4 space-y-4 border-b border-border">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-bold text-foreground">History</h1>
+                    <h1 className="text-2xl font-bold text-foreground">{t('workouts.history')}</h1>
                     <Button
                         onClick={onStartWorkout}
                         className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-900/20"
                     >
                         <Plus className="w-4 h-4 mr-2" />
-                        Log Workout
+                        {t('workouts.logWorkout')}
                     </Button>
                 </div>
             </div>
@@ -104,18 +106,18 @@ export function WorkoutHistory({ onStartWorkout }: { onStartWorkout: () => void 
             <div className="flex-1 overflow-auto p-4">
                 {loading ? (
                     <div className="flex items-center justify-center h-48 text-muted-foreground">
-                        Loading history...
+                        {t('workouts.loadingHistory')}
                     </div>
                 ) : workouts.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-64 text-muted-foreground border-2 border-dashed border-border rounded-lg">
                         <Dumbbell className="w-12 h-12 mb-4 opacity-50" />
-                        <p>No workouts logged yet.</p>
+                        <p>{t('workouts.noHistory')}</p>
                         <Button
                             variant="link"
                             className="text-emerald-500 mt-2"
                             onClick={onStartWorkout}
                         >
-                            Start your first workout
+                            {t('workouts.startFirst')}
                         </Button>
                     </div>
                 ) : (
@@ -136,10 +138,10 @@ export function WorkoutHistory({ onStartWorkout }: { onStartWorkout: () => void 
                                     <Table>
                                         <TableHeader>
                                             <TableRow className="border-border hover:bg-transparent">
-                                                <TableHead className="text-muted-foreground">Exercise</TableHead>
-                                                <TableHead className="text-center text-muted-foreground">Set</TableHead>
-                                                <TableHead className="text-center text-muted-foreground">kg</TableHead>
-                                                <TableHead className="text-center text-muted-foreground">Reps</TableHead>
+                                                <TableHead className="text-muted-foreground">{t('workouts.set')}</TableHead>
+                                                <TableHead className="text-center text-muted-foreground">{t('workouts.set')}</TableHead>
+                                                <TableHead className="text-center text-muted-foreground">{t('workouts.weight')}</TableHead>
+                                                <TableHead className="text-center text-muted-foreground">{t('workouts.reps')}</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
@@ -152,7 +154,7 @@ export function WorkoutHistory({ onStartWorkout }: { onStartWorkout: () => void 
                                                 .map((set) => (
                                                     <TableRow key={set.id} className="border-border hover:bg-muted/50">
                                                         <TableCell className="font-medium text-foreground">
-                                                            {set.exercises?.name || "Unknown Exercise"}
+                                                            {set.exercises?.name || t('workouts.unknownExercise')}
                                                         </TableCell>
                                                         <TableCell className="text-center text-muted-foreground">
                                                             {set.set_number}

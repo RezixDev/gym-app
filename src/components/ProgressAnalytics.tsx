@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "../lib/supabase";
 import {
     LineChart,
@@ -35,6 +36,7 @@ interface ChartDataPoint {
 }
 
 export function ProgressAnalytics() {
+    const { t } = useTranslation();
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [selectedExerciseId, setSelectedExerciseId] = useState<string>("");
     const [loading, setLoading] = useState(true);
@@ -162,13 +164,13 @@ export function ProgressAnalytics() {
 
     return (
         <div className="pb-24 pt- safe-top min-h-screen bg-background text-foreground p-4">
-            <h1 className="text-2xl font-bold text-emerald-500 mb-6 font-display">Step Progress</h1>
+            <h1 className="text-2xl font-bold text-emerald-500 mb-6 font-display">{t('analytics.title')}</h1>
 
             <div className="space-y-6">
                 {/* Controls */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider">Exercise</label>
+                        <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider">{t('analytics.exercise')}</label>
                         <select
                             value={selectedExerciseId}
                             onChange={(e) => setSelectedExerciseId(e.target.value)}
@@ -181,25 +183,25 @@ export function ProgressAnalytics() {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Metric</label>
+                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('analytics.metric')}</label>
                         <div className="flex bg-muted rounded-lg p-1 border border-border">
                             <button
                                 onClick={() => setMetric("1rm")}
                                 className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${metric === "1rm" ? "bg-background shadow-sm text-emerald-500" : "text-muted-foreground hover:text-foreground"}`}
                             >
-                                Est. 1RM
+                                {t('analytics.est1rm')}
                             </button>
                             <button
                                 onClick={() => setMetric("volume")}
                                 className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${metric === "volume" ? "bg-background shadow-sm text-emerald-500" : "text-muted-foreground hover:text-foreground"}`}
                             >
-                                Volume
+                                {t('analytics.volume')}
                             </button>
                             <button
                                 onClick={() => setMetric("avgWeight")}
                                 className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${metric === "avgWeight" ? "bg-background shadow-sm text-emerald-500" : "text-muted-foreground hover:text-foreground"}`}
                             >
-                                Avg Weight
+                                {t('analytics.avgWeight')}
                             </button>
                         </div>
                     </div>
@@ -251,8 +253,8 @@ export function ProgressAnalytics() {
                         </ResponsiveContainer>
                     ) : (
                         <div className="h-full flex flex-col items-center justify-center text-neutral-500 space-y-2">
-                            <p>No data available for this exercise.</p>
-                            <p className="text-xs">Log some workouts to see your progress!</p>
+                            <p>{t('analytics.noData')}</p>
+                            <p className="text-xs">{t('analytics.startLogging')}</p>
                         </div>
                     )}
                 </div>

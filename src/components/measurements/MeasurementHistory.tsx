@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "../../lib/supabase";
 import { format } from "date-fns";
 import { TrendingUp, TrendingDown, Minus, Calendar } from "lucide-react";
@@ -27,6 +28,7 @@ interface MeasurementHistoryProps {
 }
 
 export function MeasurementHistory({ refreshTrigger }: MeasurementHistoryProps) {
+    const { t } = useTranslation();
     const [dataByDate, setDataByDate] = useState<MeasurementsByDate>({});
     // We keep a secondary map to quickly look up the "previous" value for a specific body part
     // to calculate growth. This could be optimized but simplified for now.
@@ -100,7 +102,7 @@ export function MeasurementHistory({ refreshTrigger }: MeasurementHistoryProps) 
     };
 
     if (loading) {
-        return <div className="text-center text-neutral-500 py-8">Loading history...</div>;
+        return <div className="text-center text-neutral-500 py-8">{t('measurements.loadingHistory')}</div>;
     }
 
     const sortedDates = Object.keys(dataByDate).sort((a, b) => b.localeCompare(a)); // Descending dates
@@ -108,14 +110,14 @@ export function MeasurementHistory({ refreshTrigger }: MeasurementHistoryProps) 
     if (sortedDates.length === 0) {
         return (
             <div className="text-center text-neutral-500 py-8 bg-neutral-900/50 rounded-xl border border-neutral-800 border-dashed">
-                No history yet. Start logging!
+                {t('measurements.noHistory')}
             </div>
         );
     }
 
     return (
         <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white px-1">History</h3>
+            <h3 className="text-lg font-semibold text-white px-1">{t('measurements.history')}</h3>
 
             <Accordion type="single" collapsible className="space-y-2">
                 {sortedDates.map((dateKey) => {
@@ -123,7 +125,7 @@ export function MeasurementHistory({ refreshTrigger }: MeasurementHistoryProps) 
                     // Determine a nice title, e.g. "Jan 5, 2026"
                     const displayDate = format(new Date(dateKey), "MMMM d, yyyy");
                     // Summary text, e.g. "5 updates"
-                    const summary = `${updates.length} metric${updates.length > 1 ? "s" : ""}`;
+                    const summary = t(updates.length === 1 ? 'measurements.metrics_one' : 'measurements.metrics_other', { count: updates.length });
 
                     return (
                         <AccordionItem key={dateKey} value={dateKey} className="bg-neutral-900 border border-neutral-800 rounded-lg px-2">
@@ -145,7 +147,9 @@ export function MeasurementHistory({ refreshTrigger }: MeasurementHistoryProps) 
 
                                     return (
                                         <div key={measurement.id} className="flex justify-between items-center p-2 bg-neutral-950/50 rounded border border-neutral-800/50">
-                                            <span className="text-sm text-neutral-300 font-medium">{measurement.part_name}</span>
+                                            <span className="text-sm text-neutral-300 font-medium">
+                                                {t(`measurements.parts.${measurement.part_name}`, measurement.part_name)}
+                                            </span>
                                             <div className="flex items-center gap-3">
                                                 <span className="text-sm text-white font-bold">
                                                     {measurement.value} <span className="text-[10px] text-neutral-500 font-normal">{measurement.unit}</span>
