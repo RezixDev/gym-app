@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { useTranslation } from "react-i18next";
 import { Dashboard } from "./Dashboard";
 import { ExerciseLibrary } from "./ExerciseLibrary";
 import { WorkoutLogger } from "./WorkoutLogger";
@@ -11,6 +12,7 @@ import { MealBuilder } from "./nutrition/MealBuilder";
 import { Home, Dumbbell, List, User, LineChart, Scale, ChefHat } from "lucide-react";
 
 export function Layout() {
+    const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState("dashboard");
     const [workoutView, setWorkoutView] = useState<"history" | "logger">("history");
 
@@ -55,7 +57,7 @@ export function Layout() {
                             }`}
                     >
                         <Home className="w-6 h-6" />
-                        <span className="text-[10px] font-medium">Dashboard</span>
+                        <span className="text-[10px] font-medium">{t('nav.dashboard')}</span>
                     </button>
 
                     <button
@@ -64,7 +66,7 @@ export function Layout() {
                             }`}
                     >
                         <Dumbbell className="w-6 h-6" />
-                        <span className="text-[10px] font-medium">Workouts</span>
+                        <span className="text-[10px] font-medium">{t('nav.workouts')}</span>
                     </button>
 
                     <button
@@ -73,7 +75,7 @@ export function Layout() {
                             }`}
                     >
                         <ChefHat className="w-6 h-6" />
-                        <span className="text-[10px] font-medium">Nutrition</span>
+                        <span className="text-[10px] font-medium">{t('nav.nutrition')}</span>
                     </button>
 
                     <button
@@ -82,7 +84,7 @@ export function Layout() {
                             }`}
                     >
                         <List className="w-6 h-6" />
-                        <span className="text-[10px] font-medium">Exercises</span>
+                        <span className="text-[10px] font-medium">{t('nav.exercises')}</span>
                     </button>
 
                     {/* Analytics - Desktop Only */}
@@ -92,7 +94,7 @@ export function Layout() {
                             }`}
                     >
                         <LineChart className="w-6 h-6" />
-                        <span className="text-[10px] font-medium">Analytics</span>
+                        <span className="text-[10px] font-medium">{t('nav.analytics')}</span>
                     </button>
 
                     <button
@@ -101,7 +103,7 @@ export function Layout() {
                             }`}
                     >
                         <Scale className="w-6 h-6" />
-                        <span className="text-[10px] font-medium">Measure</span>
+                        <span className="text-[10px] font-medium">{t('nav.measurements')}</span>
                     </button>
 
                     <button
@@ -110,7 +112,7 @@ export function Layout() {
                             }`}
                     >
                         <User className="w-6 h-6" />
-                        <span className="text-[10px] font-medium">Profile</span>
+                        <span className="text-[10px] font-medium">{t('nav.profile')}</span>
                     </button>
                 </div>
             </nav>

@@ -1,0 +1,42 @@
+{
+    "common": {
+        "loading": "Loading...",
+        "language": "Language",
+        "theme": "Theme"
+    },
+    "nav": {
+        "dashboard": "Dashboard",
+        "workouts": "Workouts",
+        "nutrition": "Nutrition",
+        "exercises": "Exercises",
+        "analytics": "Analytics",
+        "measurements": "Measure",
+        "progress": "Progress",
+        "profile": "Profile"
+    },
+    "auth": {
+        "signIn": "Sign In",
+        "signOut": "Sign Out"
+    },
+    "profile": {
+        "title": "Profile",
+        "statistics": "Statistics",
+        "totalWorkouts": "Total Workouts",
+        "viewAnalytics": "View Progress Analytics",
+        "bodyStats": "Body Stats",
+        "weight": "Weight",
+        "height": "Height",
+        "settings": "Settings",
+        "nutritionGoals": "Nutrition Goals",
+        "dailyCalories": "Daily Calories",
+        "dailyProtein": "Daily Protein",
+        "unitPreference": "Unit Preference",
+        "unitDescription": "Show weights in Lbs instead of Kg",
+        "appearance": "Appearance",
+        "appearanceDescription": "Customize how the app looks",
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System",
+        "seedData": "Seed Test Data (30 Days)"
+    }
+}

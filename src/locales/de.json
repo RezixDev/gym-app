@@ -1,0 +1,42 @@
+{
+    "common": {
+        "loading": "Laden...",
+        "language": "Sprache",
+        "theme": "Thema"
+    },
+    "nav": {
+        "dashboard": "Übersicht",
+        "workouts": "Trainings",
+        "nutrition": "Ernährung",
+        "exercises": "Übungen",
+        "analytics": "Analytik",
+        "measurements": "Messen",
+        "progress": "Fortschritt",
+        "profile": "Profil"
+    },
+    "auth": {
+        "signIn": "Anmelden",
+        "signOut": "Abmelden"
+    },
+    "profile": {
+        "title": "Profil",
+        "statistics": "Statistiken",
+        "totalWorkouts": "Gesamttrainings",
+        "viewAnalytics": "Fortschrittsanalyse anzeigen",
+        "bodyStats": "Körperwerte",
+        "weight": "Gewicht",
+        "height": "Größe",
+        "settings": "Einstellungen",
+        "nutritionGoals": "Ernährungsziele",
+        "dailyCalories": "Tägliche Kalorien",
+        "dailyProtein": "Tägliches Protein",
+        "unitPreference": "Einheiteneinstellung",
+        "unitDescription": "Gewichte in Lbs statt Kg anzeigen",
+        "appearance": "Erscheinungsbild",
+        "appearanceDescription": "App-Design anpassen",
+        "light": "Hell",
+        "dark": "Dunkel",
+        "system": "System",
+        "seedData": "Testdaten generieren (30 Tage)"
+    }
+}

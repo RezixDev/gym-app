@@ -1,0 +1,42 @@
+{
+    "common": {
+        "loading": "Ładowanie...",
+        "language": "Język",
+        "theme": "Motyw"
+    },
+    "nav": {
+        "dashboard": "Pulpit",
+        "workouts": "Treningi",
+        "nutrition": "Odżywianie",
+        "exercises": "Ćwiczenia",
+        "analytics": "Analityka",
+        "measurements": "Pomiary",
+        "progress": "Postępy",
+        "profile": "Profil"
+    },
+    "auth": {
+        "signIn": "Zaloguj się",
+        "signOut": "Wyloguj się"
+    },
+    "profile": {
+        "title": "Profil",
+        "statistics": "Statystyki",
+        "totalWorkouts": "Liczba treningów",
+        "viewAnalytics": "Zobacz analitykę postępów",
+        "bodyStats": "Pomiary ciała",
+        "weight": "Waga",
+        "height": "Wzrost",
+        "settings": "Ustawienia",
+        "nutritionGoals": "Cele żywieniowe",
+        "dailyCalories": "Dzienne kalorie",
+        "dailyProtein": "Dzienne białko",
+        "unitPreference": "Preferencje jednostek",
+        "unitDescription": "Pokaż wagi w funtach zamiast kg",
+        "appearance": "Wygląd",
+        "appearanceDescription": "Dostosuj wygląd aplikacji",
+        "light": "Jasny",
+        "dark": "Ciemny",
+        "system": "System",
+        "seedData": "Wygeneruj dane testowe (30 dni)"
+    }
+}

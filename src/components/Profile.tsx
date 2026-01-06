@@ -11,12 +11,16 @@ import { Input } from "@/components/ui/input";
 import { LogOut, Settings, Activity, User as UserIcon, LineChart, Sun, Moon, Monitor } from "lucide-react";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 interface ProfileProps {
     onNavigate?: (tab: string) => void;
 }
 
+import { useTranslation } from "react-i18next";
+
 export function Profile({ onNavigate }: ProfileProps) {
+    const { t } = useTranslation();
     const { user, signOut } = useAuth();
     const [workoutCount, setWorkoutCount] = useState<number>(0);
     const [unitPreference, setUnitPreference] = useState<"kg" | "lbs">("kg");
@@ -128,7 +132,7 @@ export function Profile({ onNavigate }: ProfileProps) {
                     </AvatarFallback>
                 </Avatar>
                 <div>
-                    <h1 className="text-2xl font-bold text-foreground">Profile</h1>
+                    <h1 className="text-2xl font-bold text-foreground">{t('profile.title')}</h1>
                     <p className="text-muted-foreground text-sm">{user.email}</p>
                 </div>
             </header>
@@ -143,7 +147,7 @@ export function Profile({ onNavigate }: ProfileProps) {
                     </CardHeader>
                     <CardContent>
                         <div className="flex justify-between items-center py-2">
-                            <span className="text-muted-foreground">Total Workouts</span>
+                            <span className="text-muted-foreground">{t('profile.totalWorkouts')}</span>
                             <span className="text-2xl font-bold text-foreground font-mono">{workoutCount}</span>
                         </div>
                     </CardContent>
@@ -157,7 +161,7 @@ export function Profile({ onNavigate }: ProfileProps) {
                         onClick={() => onNavigate?.("analytics")}
                     >
                         <LineChart className="mr-2 h-4 w-4 text-emerald-500" />
-                        View Progress Analytics
+                        {t('profile.viewAnalytics')}
                     </Button>
                 </div>
 
@@ -171,7 +175,7 @@ export function Profile({ onNavigate }: ProfileProps) {
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="weight" className="text-muted-foreground">Weight ({unitPreference})</Label>
+                                <Label htmlFor="weight" className="text-muted-foreground">{t('profile.weight')} ({unitPreference})</Label>
                                 <Input
                                     id="weight"
                                     type="number"
@@ -184,7 +188,7 @@ export function Profile({ onNavigate }: ProfileProps) {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="height" className="text-muted-foreground">Height (cm)</Label>
+                                <Label htmlFor="height" className="text-muted-foreground">{t('profile.height')} (cm)</Label>
                                 <Input
                                     id="height"
                                     type="number"
@@ -204,15 +208,15 @@ export function Profile({ onNavigate }: ProfileProps) {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-lg flex items-center gap-2 text-foreground">
                             <Settings className="h-5 w-5 text-emerald-500" />
-                            Settings
+                            {t('profile.settings')}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-6">
                         <div className="space-y-4">
-                            <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Nutrition Goals</h3>
+                            <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{t('profile.nutritionGoals')}</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="calories" className="text-muted-foreground">Daily Calories (kcal)</Label>
+                                    <Label htmlFor="calories" className="text-muted-foreground">{t('profile.dailyCalories')}</Label>
                                     <Input
                                         id="calories"
                                         type="number"
@@ -225,7 +229,7 @@ export function Profile({ onNavigate }: ProfileProps) {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="protein" className="text-muted-foreground">Daily Protein (g)</Label>
+                                    <Label htmlFor="protein" className="text-muted-foreground">{t('profile.dailyProtein')}</Label>
                                     <Input
                                         id="protein"
                                         type="number"
@@ -242,9 +246,9 @@ export function Profile({ onNavigate }: ProfileProps) {
 
                         <div className="flex items-center justify-between space-x-2 bg-background p-3 rounded-lg border border-border">
                             <Label htmlFor="unit-mode" className="flex flex-col space-y-1 cursor-pointer">
-                                <span className="text-foreground font-medium">Unit Preference</span>
+                                <span className="text-foreground font-medium">{t('profile.unitPreference')}</span>
                                 <span className="font-normal text-xs text-muted-foreground">
-                                    Show weights in Lbs instead of Kg
+                                    {t('profile.unitDescription')}
                                 </span>
                             </Label>
                             <Switch
@@ -256,10 +260,12 @@ export function Profile({ onNavigate }: ProfileProps) {
                             />
                         </div>
 
+                        <LanguageSwitcher />
+
                         <div className="space-y-3 pt-4 border-t border-border">
                             <div className="space-y-0.5">
-                                <label className="text-sm font-medium text-foreground">Appearance</label>
-                                <p className="text-xs text-muted-foreground">Customize how the app looks</p>
+                                <label className="text-sm font-medium text-foreground">{t('profile.appearance')}</label>
+                                <p className="text-xs text-muted-foreground">{t('profile.appearanceDescription')}</p>
                             </div>
 
                             <div className="grid grid-cols-3 gap-2">
@@ -271,7 +277,7 @@ export function Profile({ onNavigate }: ProfileProps) {
                                         }`}
                                 >
                                     <Sun className="w-5 h-5 mb-2" />
-                                    <span className="text-xs font-medium">Light</span>
+                                    <span className="text-xs font-medium">{t('profile.light')}</span>
                                 </button>
                                 <button
                                     onClick={() => setTheme("dark")}
@@ -281,7 +287,7 @@ export function Profile({ onNavigate }: ProfileProps) {
                                         }`}
                                 >
                                     <Moon className="w-5 h-5 mb-2" />
-                                    <span className="text-xs font-medium">Dark</span>
+                                    <span className="text-xs font-medium">{t('profile.dark')}</span>
                                 </button>
                                 <button
                                     onClick={() => setTheme("system")}
@@ -291,7 +297,7 @@ export function Profile({ onNavigate }: ProfileProps) {
                                         }`}
                                 >
                                     <Monitor className="w-5 h-5 mb-2" />
-                                    <span className="text-xs font-medium">System</span>
+                                    <span className="text-xs font-medium">{t('profile.system')}</span>
                                 </button>
                             </div>
                         </div>
@@ -312,7 +318,7 @@ export function Profile({ onNavigate }: ProfileProps) {
                     }}
                 >
                     <Activity className="mr-2 h-4 w-4" />
-                    Seed Test Data (30 Days)
+                    {t('profile.seedData')}
                 </Button>
 
                 <Button
@@ -321,7 +327,7 @@ export function Profile({ onNavigate }: ProfileProps) {
                     onClick={signOut}
                 >
                     <LogOut className="mr-2 h-4 w-4" />
-                    Sign Out
+                    {t('auth.signOut')}
                 </Button>
             </div>
         </div>
